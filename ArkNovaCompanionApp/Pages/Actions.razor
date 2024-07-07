@@ -1,0 +1,76 @@
+﻿@inject ICollectionsService CollectionsService
+@inject IBreakService BreakService
+<h3>Actions</h3>
+
+@if (!isActionsSet)
+{
+    <button class="btn btn-primary" @onclick="() => SetupActionsOrder()">Setup Actions</button>
+}
+
+<div class="d-flex">
+    @for (int i = 0; i < orderedActions.Count; i++)
+    {
+        var action = orderedActions[i];
+        <div class="d-flex flex-column align-items-center">
+            <div class="square rounded-4 text-bg-dark m-2">
+                <div class="container fs-2">@(i + 1)</div>
+            </div>
+            <div class="card @(action.Upgraded ? "text-bg-success" : "text-bg-info") m-1">
+                <div class="card-body" @onclick="() => ChooseAction(action)">
+                    <h4 class="card-title d-flex justify-content-between">
+                        <FontAwesome IconName="@action.IconName"></FontAwesome>
+                        @action.Name
+                    </h4>
+                    <p class="card-text">
+                        @if (action.Upgraded)
+                        {
+                            @action.RenderedUpgradedDescription
+                        }
+                        else
+                        {
+                            @action.RenderedDescription
+                        }
+                    </p>
+                </div>
+                <div class="card-footer d-flex flex-column align-items-center">
+                    <button class="btn btn-primary" @onclick="() => UpgradeAction(action)">@(action.Upgraded ? "-" : "+")</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool isActionsSet = false;
+
+    private List<ActionCard> actions = new();
+    private List<ActionCard> orderedActions = new();
+
+    protected override void OnInitialized()
+    {
+        actions = CollectionsService.GetActions();
+    }
+
+    private void SetupActionsOrder()
+    {
+        isActionsSet = true;
+        orderedActions = actions.Where(a => a.Name != "Animals").OrderBy(x => Guid.NewGuid()).ToList();
+        orderedActions.Insert(0, actions.First(a => a.Name == "Animals"));
+    }
+
+    private void ChooseAction(ActionCard action)
+    {
+        orderedActions.Remove(action);
+        orderedActions.Insert(0, action);
+
+        if (action.Name == "Cards")
+        {
+            BreakService.IncreaseBreak(2);
+        }
+    }
+
+    private void UpgradeAction(ActionCard action)
+    {
+        action.Upgraded = !action.Upgraded;
+    }
+}

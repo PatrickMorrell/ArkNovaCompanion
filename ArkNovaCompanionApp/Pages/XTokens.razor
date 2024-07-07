@@ -1,0 +1,41 @@
+﻿<h3>X tokens</h3>
+
+<button class="btn btn-danger" @onclick="() => RemoveXToken()">
+    <FontAwesome IconName="xmark"></FontAwesome>
+    <FontAwesome IconName="minus"></FontAwesome>
+</button>
+
+<button class="btn btn-primary" @onclick="() => AddXToken()">
+    <FontAwesome IconName="xmark"></FontAwesome>
+    <FontAwesome IconName="plus"></FontAwesome>
+</button>
+
+<div class="d-flex">
+    @for (int i = 0; i < totalAmount; i++)
+    {
+        <div class="mx-2">
+            <FontAwesome IconName="xmark"></FontAwesome>
+        </div>
+    }
+</div>
+
+@code {
+
+    private int totalAmount = 0;
+
+    private void AddXToken()
+    {
+        if (totalAmount < 5)
+        {
+            totalAmount++;
+        }
+    }
+
+    private void RemoveXToken()
+    {
+        if (totalAmount > 0)
+        {
+            totalAmount--;
+        }
+    }
+}

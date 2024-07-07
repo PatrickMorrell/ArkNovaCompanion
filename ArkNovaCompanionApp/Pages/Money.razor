@@ -1,0 +1,62 @@
+﻿
+<h3>Money</h3>
+
+<div>
+    @foreach (var coin in coins)
+    {
+        <button class="btn btn-primary square" @onclick="() => AddMoney(coin)">+@coin.Value</button>
+    }
+</div>
+<div>
+    @foreach (var coin in coins)
+    {
+        <button class="btn btn-danger square" @onclick="() => RemoveMoney(coin)">-@coin.Value</button>
+    }
+</div>
+<div class="d-flex flex-wrap w-25">
+    @foreach (var coin in coins)
+    {
+        for (int i = 0; i < coin.Amount; i++)
+        {
+            <div class="square rounded-4 bg-warning m-2">
+                <div class="container fs-2">@coin.Value</div>
+            </div>
+        }
+    }
+</div>
+
+<p>Total amount: @totalAmount</p>
+
+@code {
+    private class Coin
+    {
+        public int Value { get; set; }
+
+        public int Amount { get; set; } = 0;
+    }
+
+    List<Coin> coins = new List<Coin>()
+    {
+        new Coin { Value = 1 },
+        new Coin { Value = 5 },
+        new Coin { Value = 10 },
+        new Coin { Value = 20 }
+    };
+
+    private int totalAmount = 0;
+
+    private void AddMoney(Coin money)
+    {
+        totalAmount += money.Value;
+        money.Amount++;
+    }
+
+    private void RemoveMoney(Coin money)
+    {
+        if (money.Amount > 0)
+        {
+            totalAmount -= money.Value;
+            money.Amount--;
+        }
+    }
+}
