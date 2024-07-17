@@ -2,6 +2,10 @@ html, body {
     font-family: 'Arial'
 }
 
+strong {
+  padding-inline: 0.1rem;
+}
+
 h1:focus {
     outline: none;
 }
@@ -102,9 +106,14 @@ code {
     color: #c02d76;
 }
 
-.square {
-    height: 4rem;
-    width: 4rem;
+.square-1 {
+  height: 4rem;
+  width: 4rem;
+}
+
+.square-2 {
+  height: 2rem;
+  width: 2rem;
 }
 
 .card {

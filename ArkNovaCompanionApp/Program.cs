@@ -10,7 +10,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddScoped<ICollectionsService, CollectionsService>();
 builder.Services.AddScoped<IBreakService, BreakService>();
+builder.Services.AddScoped<IMoneyService, MoneyService>();
 
 await builder.Build().RunAsync();

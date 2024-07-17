@@ -2,36 +2,47 @@
 @inject IJSRuntime JSRuntime
 <h3>Break</h3>
 
-<button class="btn btn-primary" @onclick="() => BreakService.IncreaseBreak()">Increase Break</button>
+<button class="btn btn-primary" @onclick="() => BreakService.AdvanceBreak()">Advance Break</button>
 <button class="btn btn-primary" @onclick="() => BreakService.ResetBreak(start)">Reset Break</button>
 <div class="d-flex">
     @for (int i = 1; i <= start; i++)
     {
-        <div class="square rounded-3 @(i % 2 == 0 ? "text-bg-dark" : "text-bg-secondary") m-2">
-            <div class="container fs-2">
+        <div class="square-1 rounded-3 @(i % 2 == 0 ? "text-bg-dark" : "text-bg-secondary") m-2">
+            <div class="container">
                 @if (BreakService.BreakAmount == i)
                 {
-                    <FontAwesome IconName="mug-hot"></FontAwesome>
+                    <div @onclick="() => BreakService.AdvanceBreak()">
+                        <FontAwesome IconName="mug-hot"></FontAwesome>
+                    </div>
                 }
                 else
                 {
-                    <div class="container fs-2">@(i)</div>
+                    <div class="fs-2">@(i)</div>
                 }
             </div>
         </div>
     }
 </div>
 
-<Modal @ref="modal">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#breakModal">
+    Target modal
+</button>
+<button type="button" class="btn btn-secondary" @onclick="() => modal.Open()">
+    Open modal
+</button>
+
+<Modal Id="breakModal" @ref="modal">
     <Title>Break!</Title>
     <Body>
         Would you like to trigger a break?
     </Body>
     <Footer>
         <button type="button" class="btn btn-primary">Yes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => modal.Close()">No</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
     </Footer>
 </Modal>
+
+
 
 @code {
     private Modal modal { get; set; }
@@ -39,13 +50,12 @@
 
     protected override void OnInitialized()
     {
-        BreakService.OnBreakChanged += StateHasChanged;
         BreakService.OnBreakTriggered += async () => await modal.Open();
         BreakService.ResetBreak(start);
     }
 
     public void Dispose()
     {
-        BreakService.OnBreakChanged -= StateHasChanged;
+        BreakService.OnBreakTriggered -= StateHasChanged;
     }
 }

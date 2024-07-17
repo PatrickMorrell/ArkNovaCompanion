@@ -1,15 +1,9 @@
-﻿namespace ArkNovaCompanionApp.Services.Interfaces
+﻿namespace ArkNovaCompanionApp.Services.Interfaces;
+
+public interface IBreakService
 {
-    public interface IBreakService
-    {
-        int BreakAmount { get; set; }
-
-        event Action OnBreakChanged;
-
-        event Action OnBreakTriggered;
-
-        void IncreaseBreak(int amount = 1);
-
-        void ResetBreak(int amount);
-    }
+    int BreakAmount { get; set; }
+    event Action OnBreakTriggered;
+    void AdvanceBreak(int amount = 1);
+    void ResetBreak(int amount);
 }

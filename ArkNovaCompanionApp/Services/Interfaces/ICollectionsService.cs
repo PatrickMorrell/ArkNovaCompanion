@@ -1,9 +1,8 @@
 ﻿using ArkNovaCompanionApp.Models;
 
-namespace ArkNovaCompanionApp.Services.Interfaces
+namespace ArkNovaCompanionApp.Services.Interfaces;
+
+public interface ICollectionsService
 {
-    public interface ICollectionsService
-    {
-        List<ActionCard> GetActions();
-    }
+    List<ActionModel> GetActions();
 }

@@ -10,3 +10,20 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+<script>
+    window.openModal = (modalId) => {
+        const modal = new bootstrap.Modal(document.getElementById(modalId), { keyboard: false })
+        modal.show();
+    }
+    window.closeModal = (modalId) => {
+        const modal = new bootstrap.Modal(document.getElementById(modalId), { keyboard: false })
+        modal.hide();
+    }
+    window.getItem = (key) => {
+        return window.sessionStorage.getItem(key);
+    }
+    window.setItem = (key, value) => {
+        window.sessionStorage.setItem(key, value);
+    }
+</script>
