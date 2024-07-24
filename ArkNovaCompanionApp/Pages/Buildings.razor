@@ -1,0 +1,24 @@
+﻿@inject IBuildingService BuildingService
+
+<h3>Buildings</h3>
+
+@foreach (BuildingModel building in BuildingService.Buildings)
+{
+	<div>@building.Name: @building.Amount</div>
+}
+
+@code {
+	protected override void OnInitialized()
+	{
+		BuildingService.OnBuildingsChanged += StateHasChanged;
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await BuildingService.GetStoredBuildings();
+			StateHasChanged();
+		}
+	}
+}

@@ -1,6 +1,5 @@
 ﻿using ArkNovaCompanionApp.Models;
 using ArkNovaCompanionApp.Services.Interfaces;
-using System.Drawing;
 using System.Text.Json;
 
 namespace ArkNovaCompanionApp.Services;
@@ -8,70 +7,53 @@ namespace ArkNovaCompanionApp.Services;
 public class MoneyService : IMoneyService
 {
     private readonly IStorageService _storageService;
+    private List<CoinModel> _coins;
     public MoneyService(IStorageService storageService)
     {
         _storageService = storageService;
-        Coins = GetNoCoins();
+        Coins = GetCoinsDefault();
+        OnMoneyChanged += async () => await UpdateStoredMoney();
     }
 
-    private async Task InitializeAsync()
+    public event Action OnMoneyChanged;
+
+    public List<CoinModel> Coins
     {
-        await GetStoredMoney();
+        get => _coins; 
+        set
+        {
+            if (value != _coins)
+            {
+                _coins = value;
+                OnMoneyChanged?.Invoke();
+            }
+        }
     }
 
-    public Task Initialization { get; private set; }
-
-    public int Total { get; set; } = 0;
-
-    public List<CoinModel> Coins { get; set; }
-
-    public async Task AddMoney(CoinModel coin)
+    public void AddMoney(CoinModel coin)
     {
-        Total += coin.Value;
         Coins.First(c => c.Value == coin.Value).Amount++;
-        await UpdateStoredMoney();
     }
 
-    public async Task AddMoney(int money)
+    public void AddMoney(int money)
     {
-        Total += money;
         Coins.First(c => c.Value == 1).Amount += money;
-        await UpdateStoredMoney();
     }
 
-    public async Task RemoveMoney(CoinModel coin)
+    public void RemoveMoney(CoinModel coin)
     {
         if (coin.Amount > 0)
         {
-            Total -= coin.Value;
             Coins.First(c => c.Value == coin.Value).Amount--;
-            await UpdateStoredMoney();
         }
     }
 
     public async Task GetStoredMoney()
     {
-        string storedTotal = await _storageService.GetFromStorage("moneyTotal");
-        if (!int.TryParse(storedTotal, out int moneyTotal))
-        {
-            moneyTotal = 0;
-        }
-        Total = moneyTotal;
-
-        string storedCoins = await _storageService.GetFromStorage("coins");
-        List<CoinModel> currentCoins = Coins;
-        if (!string.IsNullOrEmpty(storedCoins))
-        {
-            var coinData = JsonSerializer.Deserialize<List<CoinModel>>(storedCoins);
-            if (coinData != null)
-            {
-                currentCoins = coinData;
-            }
-        }
-        Coins = currentCoins;
+        Coins = await _storageService.GetStoredList("coins", Coins);
     }
 
-    private List<CoinModel> GetNoCoins()
+    private List<CoinModel> GetCoinsDefault()
     {
         return new()
         {
@@ -84,8 +66,6 @@ public class MoneyService : IMoneyService
 
     private async Task UpdateStoredMoney()
     {
-        await _storageService.SaveToStorage("moneyTotal", Total.ToString());
-
         await _storageService.SaveToStorage("coins", JsonSerializer.Serialize(Coins));
     }
 }

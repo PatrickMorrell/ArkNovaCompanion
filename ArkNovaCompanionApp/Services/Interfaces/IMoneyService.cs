@@ -3,10 +3,10 @@
 namespace ArkNovaCompanionApp.Services.Interfaces;
 public interface IMoneyService
 {
+    event Action OnMoneyChanged;
     List<CoinModel> Coins { get; set; }
-    int Total { get; set; }
-    Task AddMoney(CoinModel coin);
-    Task AddMoney(int money);
+    void AddMoney(CoinModel coin);
+    void AddMoney(int money);
+    void RemoveMoney(CoinModel coin);
     Task GetStoredMoney();
-    Task RemoveMoney(CoinModel coin);
 }

@@ -127,3 +127,23 @@ code {
     align-items: center;
     height: 100%;
 }
+
+.fs-x-1 {
+  font-size: 5rem;
+}
+
+.fs-x-2 {
+  font-size: 4rem;
+}
+
+.fs-x-3 {
+  font-size: 3rem;
+}
+
+.fs-x-4 {
+  font-size: 2rem;
+}
+
+.fs-x-5 {
+  font-size: 1rem;
+}

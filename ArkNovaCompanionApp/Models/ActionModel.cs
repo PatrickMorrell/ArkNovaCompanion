@@ -10,6 +10,6 @@ public class ActionModel
 
     public string? IconName { get; set; }
 
-    public bool Upgraded { get; set; } = false;
+    public bool IsUpgraded { get; set; } = false;
 
 }

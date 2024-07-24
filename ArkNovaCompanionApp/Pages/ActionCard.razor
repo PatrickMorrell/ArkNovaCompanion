@@ -1,5 +1,5 @@
 ﻿
-<div class="card @(Action.Upgraded ? "text-bg-success" : "text-bg-info") m-1">
+<div class="card @(Action.IsUpgraded ? "text-bg-success" : "text-bg-info") m-1">
 	<div class="card-body">
 		<h4 class="card-title d-flex justify-content-between mb-5">
 			<FontAwesome IconName="@Action.IconName"></FontAwesome>
@@ -20,20 +20,20 @@
 
 	private string GetDescription(ActionModel action, int strength)
 	{
-		string description = action.Upgraded ? action.UpgradedDescription : action.Description;
+		string description = action.IsUpgraded ? action.UpgradedDescription : action.Description;
 		description = description.Replace("[STRENGTH]", strength.ToString());
 
 		if (action.Name == "Animals")
 		{
-			string animals = CalculateAnimals(strength, action.Upgraded, out bool givesRep);
+			string animals = CalculateAnimals(strength, action.IsUpgraded, out bool givesRep);
 			description = description.Replace("[ANIMALS]", animals)
 				.Replace("[REPUTATION]", givesRep ? "<div>Gain 1 reputation <i class=\"fa-solid fa-graduation-cap fs-3 px-1\"></i></div>" : "");
 		}
 		else if (action.Name == "Cards")
 		{
-			string cards = CalculateCards(strength, action.Upgraded, out bool discard, out bool allowSnap);
+			string cards = CalculateCards(strength, action.IsUpgraded, out bool discard, out bool allowSnap);
 			description = description.Replace("[CARDS]", cards)
-				.Replace("[DISCARD]", discard ? " and discard 1 card" : "")
+				.Replace("[DISCARD]", discard ? " and <strong>discard 1 card</strong>" : "")
 				.Replace("[SNAP]", allowSnap ? "<div>OR snap <i class=\"fa-solid fa-folder-closed fs-3 px-1\"></i></div>" : "");
 		}
 

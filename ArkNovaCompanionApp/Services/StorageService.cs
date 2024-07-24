@@ -1,5 +1,9 @@
-﻿using ArkNovaCompanionApp.Services.Interfaces;
+﻿using ArkNovaCompanionApp.Models;
+using ArkNovaCompanionApp.Pages.Base;
+using ArkNovaCompanionApp.Services.Interfaces;
 using Microsoft.JSInterop;
+using System.Drawing;
+using System.Text.Json;
 namespace ArkNovaCompanionApp.Services;
 
 public class StorageService : IStorageService
@@ -19,5 +23,30 @@ public class StorageService : IStorageService
 	public async Task SaveToStorage(string key, string value)
 	{
 		await _jsRuntime.InvokeVoidAsync("setItem", key, value);
+	}
+
+	public async Task<int> GetStoredNumber(string key)
+	{
+		string storedValue = await GetFromStorage(key);
+		if (!int.TryParse(storedValue, out int value))
+		{
+			value = 0;
+		}
+		return value;
+	}
+
+	public async Task<List<T>> GetStoredList<T>(string key, List<T> currentList)
+	{
+		string storedList = await GetFromStorage(key);
+		List<T> list = currentList;
+		if (!string.IsNullOrEmpty(storedList))
+		{
+			var listData = JsonSerializer.Deserialize<List<T>>(storedList);
+			if (listData != null)
+			{
+				list = listData;
+			}
+		}
+		return list;
 	}
 }

@@ -14,5 +14,6 @@ builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddScoped<ICollectionsService, CollectionsService>();
 builder.Services.AddScoped<IBreakService, BreakService>();
 builder.Services.AddScoped<IMoneyService, MoneyService>();
+builder.Services.AddScoped<IBuildingService, BuildingService>();
 
 await builder.Build().RunAsync();

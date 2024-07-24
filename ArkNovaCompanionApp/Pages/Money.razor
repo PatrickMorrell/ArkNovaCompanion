@@ -28,9 +28,14 @@
     </div>
 }
 
-<p>Total amount: @MoneyService.Total</p>
+<p>Total amount: @GetMoneyTotal()</p>
 
 @code {
+    protected override void OnInitialized()
+    {
+        MoneyService.OnMoneyChanged += StateHasChanged;
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -39,4 +44,22 @@
             StateHasChanged();
         }
     }
+
+    public void Dispose()
+    {
+        MoneyService.OnMoneyChanged -= StateHasChanged;
+    }
+
+    private int GetMoneyTotal()
+    {
+        if (!MoneyService.Coins.Any())
+        {
+            return 0;
+        }
+        else
+        {
+            return MoneyService.Coins.Sum(c => (c.Value * c.Amount));
+        }
+    }
+
 }

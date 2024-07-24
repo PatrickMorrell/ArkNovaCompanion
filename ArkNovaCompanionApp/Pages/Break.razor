@@ -50,12 +50,22 @@
 
     protected override void OnInitialized()
     {
+        BreakService.OnBreakChanged += StateHasChanged;
         BreakService.OnBreakTriggered += async () => await modal.Open();
-        BreakService.ResetBreak(start);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await BreakService.GetStoredBreak(start);
+            StateHasChanged();
+        }
     }
 
     public void Dispose()
     {
-        BreakService.OnBreakTriggered -= StateHasChanged;
+        BreakService.OnBreakChanged -= StateHasChanged;
+        BreakService.OnBreakTriggered -= async () => await modal.Open();
     }
 }

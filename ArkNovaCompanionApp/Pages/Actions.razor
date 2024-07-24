@@ -1,86 +1,117 @@
 ﻿@inject ICollectionsService CollectionsService
 @inject IBreakService BreakService
 @inject IMoneyService MoneyService
+@inject IBuildingService BuildingService
 <h3>Actions</h3>
 
 @if (!isActionsSet)
 {
-	<button class="btn btn-primary" @onclick="() => SetupActionsOrder()">Setup Actions</button>
+    <button class="btn btn-primary" @onclick="() => SetupActionsOrder()">Setup Actions</button>
 }
 
 <div class="d-flex">
-	@for (int i = 0; i < orderedActions.Count; i++)
-	{
-		var action = orderedActions[i];
-		int strength = i + 1;
-		string modalId = $"{action.Name}Modal";
+    @for (int i = 0; i < orderedActions.Count; i++)
+    {
+        var action = orderedActions[i];
+        int strength = i + 1;
+        string modalId = $"{action.Name}Modal";
 
-		<div class="d-flex flex-column align-items-center">
-			<div class="square-1 rounded-4 text-bg-dark m-2">
-				<div class="container fs-2">@(strength)</div>
-			</div>
-			<div data-bs-toggle="modal" data-bs-target="#@(modalId)">
-				<ActionCard Action=action Strength=strength></ActionCard>
-			</div>
-			<button class="btn btn-primary" @onclick="() => UpgradeAction(action)">
-				<FontAwesome IconName="rotate"></FontAwesome>
-			</button>
-		</div>
-		<div id="@modalId" class="modal fade" tabindex="-1">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content w-auto">
-					<ActionCard Action=action Strength=strength></ActionCard>
-					<div class="d-flex justify-content-around mt-1 mb-2" data-bs-dismiss="modal">
-						<button class="btn btn-primary" @onclick="() => ChooseAction(action, action.Name == ActionNames.Cards ? 2 : 0)">
-							<FontAwesome IconName=@action.IconName></FontAwesome>
-						</button>
-						@if (action.Name == ActionNames.Sponsors)
-						{
-							<button class="btn btn-primary" @onclick="() => ChooseAction(action, strength)">
-								<FontAwesome IconName="mug-hot"></FontAwesome>
-							</button>
-						}
-					</div>
-				</div>
-			</div>
-		</div>
-	}
+        <div class="d-flex flex-column align-items-center">
+            <div class="square-1 rounded-4 text-bg-dark m-2">
+                <div class="container fs-2">@(strength)</div>
+            </div>
+            <div data-bs-toggle="modal" data-bs-target="#@(modalId)">
+                <ActionCard Action=action Strength=strength></ActionCard>
+            </div>
+            <button class="btn btn-primary" @onclick="() => UpgradeAction(action)">
+                <FontAwesome IconName="rotate"></FontAwesome>
+            </button>
+        </div>
+        <div id="@modalId" class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content w-auto">
+                    <ActionCard Action=action Strength=strength></ActionCard>
+                    <div class="d-flex justify-content-around mt-1 mb-2" data-bs-dismiss="modal">
+                        <button class="btn btn-primary" @onclick="() => ChooseAction(action, strength)">
+                            <FontAwesome IconName=@action.IconName></FontAwesome>
+                        </button>
+                        @if (action.Name == ActionNames.Sponsors)
+                        {
+                            <button class="btn btn-primary" @onclick="() => ChooseAction(action, strength, true)">
+                                <FontAwesome IconName="mug-hot"></FontAwesome>
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
+<Modal Id="buildMenuModal" @ref="modal">
+    <Body>
+        <BuildMenu MaxSize=@BuildSize IsUpgraded="@BuildUpgraded"></BuildMenu>
+    </Body>
+</Modal>
+
 @code {
-	private Modal modal { get; set; }
-	private bool isActionsSet = false;
+    private Modal modal { get; set; }
+    private bool isActionsSet = false;
+    private int BuildSize;
+    private bool BuildUpgraded;
 
-	private List<ActionModel> actions = new();
-	private List<ActionModel> orderedActions = new();
+    private List<ActionModel> actions = new();
+    private List<ActionModel> orderedActions = new();
 
-	protected override void OnInitialized()
-	{
-		actions = CollectionsService.GetActions();
-	}
+    protected override void OnInitialized()
+    {
+        actions = CollectionsService.GetActions();
+    }
 
-	private void SetupActionsOrder()
-	{
-		isActionsSet = true;
-		orderedActions = actions.Where(a => a.Name != ActionNames.Animals).OrderBy(x => Guid.NewGuid()).ToList();
-		orderedActions.Insert(0, actions.First(a => a.Name == ActionNames.Animals));
-	}
+    private void SetupActionsOrder()
+    {
+        isActionsSet = true;
+        orderedActions = actions.Where(a => a.Name != ActionNames.Animals).OrderBy(x => Guid.NewGuid()).ToList();
+        orderedActions.Insert(0, actions.First(a => a.Name == ActionNames.Animals));
+    }
 
-	private async Task ChooseAction(ActionModel action, int breakAmount)
-	{
-		// wait for modal to hide
-		await Task.Delay(250);
-		StateHasChanged();
+    private async Task ChooseAction(ActionModel action, int strength, bool isBreakAction = false)
+    {
+        // wait for modal to hide
+        await Task.Delay(250);
+        StateHasChanged();
 
-		orderedActions.Remove(action);
-		orderedActions.Insert(0, action);
+        if (isBreakAction)
+        {
+            BreakService.AdvanceBreak(action.Name == ActionNames.Cards ? 2 : 0);
 
-		BreakService.AdvanceBreak(breakAmount);
-		await MoneyService.AddMoney(breakAmount);
-	}
+        }
+        else
+        {
+            BreakService.AdvanceBreak(strength);
+            MoneyService.AddMoney(strength);
+        }
 
-	private void UpgradeAction(ActionModel action)
-	{
-		action.Upgraded = !action.Upgraded;
-	}
+        if (action.Name == ActionNames.Build)
+        {
+            await OpenBuildMenu(action.IsUpgraded, strength);
+        }
+        else
+        {
+            orderedActions.Remove(action);
+            orderedActions.Insert(0, action);            
+        }
+    }
+
+    private void UpgradeAction(ActionModel action)
+    {
+        action.IsUpgraded = !action.IsUpgraded;
+    }
+
+    private async Task OpenBuildMenu(bool isUpgraded, int size)
+    {
+        BuildUpgraded = isUpgraded;
+        BuildSize = size;
+        await modal.Open();
+    }
 }
