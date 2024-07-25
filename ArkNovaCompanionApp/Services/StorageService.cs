@@ -1,8 +1,5 @@
-﻿using ArkNovaCompanionApp.Models;
-using ArkNovaCompanionApp.Pages.Base;
-using ArkNovaCompanionApp.Services.Interfaces;
+﻿using ArkNovaCompanionApp.Services.Interfaces;
 using Microsoft.JSInterop;
-using System.Drawing;
 using System.Text.Json;
 namespace ArkNovaCompanionApp.Services;
 
@@ -48,5 +45,20 @@ public class StorageService : IStorageService
 			}
 		}
 		return list;
-	}
+    }
+
+    public async Task<List<T>> GetStoredList<T>(string key)
+    {
+        string storedList = await GetFromStorage(key);
+        List<T> list = null;
+        if (!string.IsNullOrEmpty(storedList))
+        {
+            var listData = JsonSerializer.Deserialize<List<T>>(storedList);
+            if (listData != null)
+            {
+                list = listData;
+            }
+        }
+        return list;
+    }
 }

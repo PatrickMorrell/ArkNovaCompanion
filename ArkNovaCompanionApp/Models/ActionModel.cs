@@ -1,6 +1,6 @@
 ﻿namespace ArkNovaCompanionApp.Models;
 
-public class ActionModel
+public class ActionModel : ActionStateModel
 {
     public string? Name { get; set; }
 
@@ -9,7 +9,5 @@ public class ActionModel
     public string? UpgradedDescription { get; set; }
 
     public string? IconName { get; set; }
-
-    public bool IsUpgraded { get; set; } = false;
 
 }

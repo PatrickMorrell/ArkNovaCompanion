@@ -1,4 +1,6 @@
 ﻿@inject IBuildingService BuildingService
+@inject ICollectionService CollectionService
+@inject IActionService ActionService
 
 @{
 	SizeRemaining = MaxSize - GetSelectedTotal();
@@ -57,7 +59,7 @@
 
 	protected override void OnInitialized()
 	{
-		buildings = BuildingService.GetBuildingsDefault();
+		buildings = CollectionService.GetBuildingsDefault();
 	}
 
 	private void ToggleSelect(BuildingModel building)
@@ -94,6 +96,7 @@
 	{
 		await BuildingService.SaveBuildings(buildings.Where(b => b.IsSelected).ToList());
 		buildings.ForEach(b => b.IsSelected = false);
+		ActionService.MoveAction(ActionNames.Build);
 	}
 
 	private void OnCancelClick()

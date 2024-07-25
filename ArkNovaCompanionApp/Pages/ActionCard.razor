@@ -6,7 +6,7 @@
 			@Action.Name
 		</h4>
 		<p class="card-text d-flex flex-column justify-content-between">
-			@(new MarkupString(GetDescription(Action, Strength)))
+			@(new MarkupString(GetDescription(Action)))
 		</p>
 	</div>
 </div>
@@ -15,23 +15,20 @@
 	[Parameter]
 	public ActionModel? Action { get; set; }
 
-	[Parameter]
-	public int Strength { get; set; }
-
-	private string GetDescription(ActionModel action, int strength)
+	private string GetDescription(ActionModel action)
 	{
 		string description = action.IsUpgraded ? action.UpgradedDescription : action.Description;
-		description = description.Replace("[STRENGTH]", strength.ToString());
+		description = description.Replace("[STRENGTH]", action.Strength.ToString());
 
 		if (action.Name == "Animals")
 		{
-			string animals = CalculateAnimals(strength, action.IsUpgraded, out bool givesRep);
+			string animals = CalculateAnimals(action.Strength, action.IsUpgraded, out bool givesRep);
 			description = description.Replace("[ANIMALS]", animals)
 				.Replace("[REPUTATION]", givesRep ? "<div>Gain 1 reputation <i class=\"fa-solid fa-graduation-cap fs-3 px-1\"></i></div>" : "");
 		}
 		else if (action.Name == "Cards")
 		{
-			string cards = CalculateCards(strength, action.IsUpgraded, out bool discard, out bool allowSnap);
+			string cards = CalculateCards(action.Strength, action.IsUpgraded, out bool discard, out bool allowSnap);
 			description = description.Replace("[CARDS]", cards)
 				.Replace("[DISCARD]", discard ? " and <strong>discard 1 card</strong>" : "")
 				.Replace("[SNAP]", allowSnap ? "<div>OR snap <i class=\"fa-solid fa-folder-closed fs-3 px-1\"></i></div>" : "");

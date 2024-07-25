@@ -2,7 +2,11 @@
 
 namespace ArkNovaCompanionApp.Services.Interfaces;
 
-public interface ICollectionsService
+public interface ICollectionService
 {
     List<ActionModel> GetActions();
+
+	List<CoinModel> GetCoinsDefault();
+
+	List<BuildingModel> GetBuildingsDefault();
 }
