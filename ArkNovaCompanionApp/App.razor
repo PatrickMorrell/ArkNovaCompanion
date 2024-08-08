@@ -13,12 +13,10 @@
 
 <script>
     window.openModal = (modalId) => {
-        const modal = new bootstrap.Modal(document.getElementById(modalId), { keyboard: false })
-        modal.show();
+        bootstrap.Modal.getOrCreateInstance(`#${modalId}`).show();
     }
     window.closeModal = (modalId) => {
-        const modal = new bootstrap.Modal(document.getElementById(modalId), { keyboard: false })
-        modal.hide();
+        bootstrap.Modal.getInstance(`#${modalId}`).hide();
     }
     window.getItem = (key) => {
         return window.sessionStorage.getItem(key);

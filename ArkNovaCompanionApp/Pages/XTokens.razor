@@ -1,41 +1,48 @@
-﻿<h3>X tokens</h3>
+﻿@inject ITokenService TokenService
 
-<button class="btn btn-danger" @onclick="() => RemoveXToken()">
-    <FontAwesome IconName="xmark"></FontAwesome>
-    <FontAwesome IconName="minus"></FontAwesome>
-</button>
-
-<button class="btn btn-primary" @onclick="() => AddXToken()">
-    <FontAwesome IconName="xmark"></FontAwesome>
-    <FontAwesome IconName="plus"></FontAwesome>
-</button>
-
-<div class="d-flex">
-    @for (int i = 0; i < totalAmount; i++)
-    {
-        <div class="mx-2">
-            <FontAwesome IconName="xmark"></FontAwesome>
-        </div>
-    }
+<div class="tokens position-relative">
+	<div @onclick="() => TokenService.AddToken()">
+		<div class="d-flex justify-content-center">
+			@for (int i = 0; i < 2; i++)
+			{
+				<div class="m-2 @((i + 3) >= TokenService.TokenAmount ? "text-light" : "text-dark")">
+					<FontAwesome IconName="square-xmark" Size="x-3"></FontAwesome>
+				</div>
+			}
+		</div>
+		<div class="d-flex justify-content-center">
+			@for (int i = 0; i < 3; i++)
+			{
+				<div class="m-2 @(i >= TokenService.TokenAmount ? "text-light" : "text-dark")">
+					<FontAwesome IconName="square-xmark" Size="x-3"></FontAwesome>
+				</div>
+			}
+		</div>
+	</div>
+	<div class="position-absolute top-100 start-100 translate-middle">
+		<button class="btn btn-danger" @onclick="() => TokenService.RemoveTokens()">
+			<FontAwesome IconName="minus" Size="3"></FontAwesome>
+		</button>
+	</div>
 </div>
 
 @code {
+	protected override void OnInitialized()
+	{
+		TokenService.OnTokensChanged += StateHasChanged;
+	}
 
-    private int totalAmount = 0;
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await TokenService.GetStoredTokens();
+			StateHasChanged();
+		}
+	}
 
-    private void AddXToken()
-    {
-        if (totalAmount < 5)
-        {
-            totalAmount++;
-        }
-    }
-
-    private void RemoveXToken()
-    {
-        if (totalAmount > 0)
-        {
-            totalAmount--;
-        }
-    }
+	public void Dispose()
+	{
+		TokenService.OnTokensChanged -= StateHasChanged;
+	}
 }

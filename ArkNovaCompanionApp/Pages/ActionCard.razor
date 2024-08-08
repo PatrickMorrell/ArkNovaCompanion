@@ -1,14 +1,11 @@
-﻿
-<div class="card @(Action.IsUpgraded ? "text-bg-success" : "text-bg-info") m-1">
-	<div class="card-body">
-		<h4 class="card-title d-flex justify-content-between mb-5">
-			<FontAwesome IconName="@Action.IconName"></FontAwesome>
-			@Action.Name
-		</h4>
-		<p class="card-text d-flex flex-column justify-content-between">
-			@(new MarkupString(GetDescription(Action)))
-		</p>
-	</div>
+﻿<div class="action-card@(Action.IsUpgraded ? "-upgraded" : "") m-1">
+	<h4 class="d-flex justify-content-between mb-5">
+		<FontAwesome IconName="@Action.IconName"></FontAwesome>
+		@Action.Name
+	</h4>
+	<p class="d-flex flex-column justify-content-between">
+		@(new MarkupString(GetDescription(Action)))
+	</p>
 </div>
 
 @code {

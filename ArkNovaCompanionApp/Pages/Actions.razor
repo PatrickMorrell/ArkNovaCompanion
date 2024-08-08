@@ -2,107 +2,155 @@
 @inject IBreakService BreakService
 @inject IMoneyService MoneyService
 @inject IBuildingService BuildingService
+@inject ITokenService TokenService
+
 <h3>Actions</h3>
 
 @if (ActionService.Actions.Any())
 {
-    <div class="d-flex">
-        @foreach (ActionModel action in ActionService.Actions)
-        {
-            string modalId = $"{action.Name}Modal";
-
-            <div class="d-flex flex-column align-items-center">
-                <div class="square-1 rounded-4 text-bg-dark m-2">
-                    <div class="container fs-2">@(action.Strength)</div>
-                </div>
-                <div data-bs-toggle="modal" data-bs-target="#@(modalId)">
-                    <ActionCard Action=action></ActionCard>
-                </div>
-                <button class="btn btn-primary" @onclick="() => ActionService.UpgradeAction(action)">
-                    <FontAwesome IconName="rotate"></FontAwesome>
-                </button>
-            </div>        <div id="@modalId" class="modal fade" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content w-auto">
-                        <ActionCard Action=action></ActionCard>
-                        <div class="d-flex justify-content-around mt-1 mb-2" data-bs-dismiss="modal">
-                            <button class="btn btn-primary" @onclick="() => OnActionClick(action)">
-                                <FontAwesome IconName=@action.IconName></FontAwesome>
-                            </button>
-                            @if (action.Name == ActionNames.Sponsors)
-                            {
-                                <button class="btn btn-primary" @onclick="() => OnActionClick(action, true)">
-                                    <FontAwesome IconName="mug-hot"></FontAwesome>
-                                </button>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+	<div class="d-flex justify-content-between">
+		@foreach (ActionModel action in ActionService.Actions)
+		{
+			<div class="position-relative">
+				<div class="d-flex flex-column align-items-center">
+					<div class="square-1 rounded-4 text-bg-dark m-2">
+						<div class="container fs-2">@(action.Strength)</div>
+					</div>
+					<div @onclick="() => OpenCard(action)">
+						<ActionCard Action=action></ActionCard>
+					</div>
+				</div>
+				<div class="position-absolute top-100 start-100 translate-middle pe-5">
+					<button class="btn btn-primary" @onclick="() => ActionService.UpgradeAction(action)">
+						<FontAwesome IconName="rotate" Size="3"></FontAwesome>
+					</button>
+				</div>
+			</div>
+		}
+	</div>
+	<Modal Id="actionCardModal" Width="w-auto" @ref="cardModal">
+		<Content>
+			@if (SelectedAction is not null)
+			{
+				<div class="d-flex align-items-center justify-content-around" @onclick="() => UsedTokens--">
+					@for (int i = 1; i <= UsedTokens; i++)
+					{
+						<div class="m-1">
+							<FontAwesome IconName="square-xmark"></FontAwesome>
+						</div>
+					}
+				</div>
+				<div @onclick="() => OnCardClick()">
+					<ActionCard Action=SelectedAction></ActionCard>
+				</div>
+				<div class="d-flex justify-content-evenly mb-2">
+					<button class="btn btn-primary" @onclick="() => OnActionClick(SelectedAction)">
+						<FontAwesome IconName=@SelectedAction.IconName></FontAwesome>
+					</button>
+					@if (SelectedAction.Name == ActionNames.Sponsors)
+					{
+						<button class="btn btn-primary" @onclick="() => OnActionClick(SelectedAction, true)">
+							<FontAwesome IconName="mug-hot"></FontAwesome>
+						</button>
+					}
+				</div>
+				<div class="position-absolute top-100 start-100 translate-middle">
+					<button class="btn btn-danger" @onclick="() => OnCardClose()">
+						<FontAwesome IconName="xmark" Size="3"></FontAwesome>
+					</button>
+				</div>
+			}
+		</Content>
+	</Modal>
 }
 
-<Modal Id="buildMenuModal" @ref="modal">
-    <Body>
-        <BuildMenu MaxSize=@BuildSize IsUpgraded="@BuildUpgraded"></BuildMenu>
-    </Body>
+<Modal Id="buildMenuModal" @ref="buildModal">
+	<Body>
+		<BuildMenu MaxSize=@BuildSize IsUpgraded="@BuildUpgraded"></BuildMenu>
+	</Body>
 </Modal>
 
 @code {
-    private Modal modal { get; set; }
-    private int BuildSize;
-    private bool BuildUpgraded;
+	private Modal cardModal { get; set; }
+	private Modal buildModal { get; set; }
+	private ActionModel? SelectedAction = null;
+	private int BuildSize;
+	private bool BuildUpgraded;
+	private int UsedTokens;
 
-    protected override void OnInitialized()
-    {
-        ActionService.OnActionsChanged += StateHasChanged;
-    }
+	protected override void OnInitialized()
+	{
+		ActionService.OnActionsChanged += StateHasChanged;
+	}
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await ActionService.GetStoredActions();
-            StateHasChanged();
-        }
-    }
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await ActionService.GetStoredActions();
+			StateHasChanged();
+		}
+	}
 
-    public void Dispose()
-    {
-        ActionService.OnActionsChanged -= StateHasChanged;
-    }
+	public void Dispose()
+	{
+		ActionService.OnActionsChanged -= StateHasChanged;
+	}
 
-    private async Task OnActionClick(ActionModel action, bool isBreakAction = false)
-    {
-        // wait for modal to hide
-        await Task.Delay(250);
-        StateHasChanged();
+	private async Task OnActionClick(ActionModel action, bool isBreakAction = false)
+	{
+		// wait for modal to hide
+		await Task.Delay(250);
+		StateHasChanged();
 
-        if (isBreakAction)
-        {
-            BreakService.AdvanceBreak(action.Strength);
-            MoneyService.AddCoins(action.Strength);
-        }
-        else
-        {
-            BreakService.AdvanceBreak(action.Name == ActionNames.Cards ? 2 : 0);
-        }
+		TokenService.RemoveTokens(UsedTokens);
+		action.Strength += UsedTokens;
+		await OnCardClose();
 
-        if (action.Name == ActionNames.Build)
-        {
-            await OpenBuildMenu(action);
-        }
-        else
-        {
-            ActionService.MoveAction(action);
-        }
-    }
+		if (isBreakAction)
+		{
+			BreakService.AdvanceBreak(action.Strength);
+			MoneyService.AddCoins(action.Strength);
+		}
+		else
+		{
+			BreakService.AdvanceBreak(action.Name == ActionNames.Cards ? 2 : 0);
+		}
 
-    private async Task OpenBuildMenu(ActionModel action)
-    {
-        BuildUpgraded = action.IsUpgraded;
-        BuildSize = action.Strength;
-        await modal.Open();
-    }
+		if (action.Name == ActionNames.Build)
+		{
+			await OpenBuildMenu(action);
+		}
+		else
+		{
+			ActionService.MoveAction(action);
+		}
+	}
+
+	private async Task OpenCard(ActionModel action)
+	{
+		SelectedAction = action;
+		await cardModal.Open();
+	}
+
+	private void OnCardClick()
+	{
+		if (UsedTokens + 1 <= TokenService.TokenAmount)
+		{
+			UsedTokens++;
+		}
+	}
+
+	private async Task OnCardClose()
+	{
+		UsedTokens = 0;
+		await cardModal.Close();
+	}
+
+	private async Task OpenBuildMenu(ActionModel action)
+	{
+		BuildUpgraded = action.IsUpgraded;
+		BuildSize = action.Strength;
+		await buildModal.Open();
+	}
 }
