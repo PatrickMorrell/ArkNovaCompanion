@@ -128,8 +128,8 @@ code {
 }
 
 .action-card-upgraded {
-	background-color: seagreen;
-	border-color: lightgreen;
+	background-color: lightgreen;
+	border-color: seagreen;
 	border-style: solid;
 	border-width: 1px;
 	border-radius: 10px;

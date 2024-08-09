@@ -1,10 +1,10 @@
 ﻿@inject IBreakService BreakService
 @inject IJSRuntime JSRuntime
-<h3>Break</h3>
 
-<button class="btn btn-primary" @onclick="() => BreakService.AdvanceBreak()">Advance Break</button>
-<button class="btn btn-primary" @onclick="() => BreakService.ResetBreak(start)">Reset Break</button>
-<div class="d-flex">
+<div class="row">
+    <button class="btn btn-primary square-1 m-2" @onclick="() => BreakService.AdvanceBreak()">
+        <FontAwesome IconName="caret-left"></FontAwesome>
+    </button>
     @for (int i = 1; i <= start; i++)
     {
         <div class="square-1 rounded-3 @(i % 2 == 0 ? "text-bg-dark" : "text-bg-secondary") m-2">
@@ -22,14 +22,10 @@
             </div>
         </div>
     }
+    <button class="btn btn-primary square-1 m-2" @onclick="() => BreakService.ResetBreak(start)">
+        <FontAwesome IconName="clock-rotate-left"></FontAwesome>
+    </button>
 </div>
-
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#breakModal">
-    Target modal
-</button>
-<button type="button" class="btn btn-secondary" @onclick="() => modal.Open()">
-    Open modal
-</button>
 
 <Modal Id="breakModal" @ref="modal">
     <Title>Break!</Title>
@@ -41,8 +37,6 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
     </Footer>
 </Modal>
-
-
 
 @code {
     private Modal modal { get; set; }
