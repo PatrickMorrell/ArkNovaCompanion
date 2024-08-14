@@ -13,4 +13,6 @@ public class BuildingModel
 	public bool IsStandard { get; set; } = false;
 
 	public bool IsSelected { get; set; }
+
+	public int Order { get; set; }
 }

@@ -149,7 +149,7 @@ code {
 	width: 20rem;
 }
 
-.container {
+.centre {
 	display: flex;
 	justify-content: center;
 	align-items: center;

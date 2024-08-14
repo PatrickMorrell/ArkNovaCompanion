@@ -86,6 +86,7 @@ public class CollectionService : ICollectionService
 				Name = "Standard Size One",
 				Icon = "dice-one",
 				IsStandard = true,
+				Order = 1,
 			},
 			new()
 			{
@@ -93,6 +94,7 @@ public class CollectionService : ICollectionService
 				Name = "Standard Size Two",
 				Icon = "dice-two",
 				IsStandard = true,
+				Order = 2,
 			},
 			new()
 			{
@@ -100,6 +102,7 @@ public class CollectionService : ICollectionService
 				Name = "Standard Size Three",
 				Icon = "dice-three",
 				IsStandard = true,
+				Order = 3,
 			},
 			new()
 			{
@@ -107,6 +110,7 @@ public class CollectionService : ICollectionService
 				Name = "Standard Size Four",
 				Icon = "dice-four",
 				IsStandard = true,
+				Order = 4,
 			},
 			new()
 			{
@@ -114,36 +118,42 @@ public class CollectionService : ICollectionService
 				Name = "Standard Size Five",
 				Icon = "dice-five",
 				IsStandard = true,
+				Order = 5,
 			},
 			new()
 			{
 				Size = 1,
 				Name = "Kiosk",
 				Icon = KIOSK_ICON,
+				Order = 1,
 			},
 			new()
 			{
 				Size = 1,
 				Name = "Pavilion",
 				Icon = PAVILION_ICON,
+				Order = 2,
 			},
 			new()
 			{
 				Size = 3,
 				Name = "Petting Zoo",
 				Icon = PETTING_ZOO_ICON,
+				Order = 3,
 			},
 			new()
 			{
 				Size = 5,
 				Name = "Reptile House",
 				Icon = REPTILE_HOUSE_ICON,
+				Order = 4,
 			},
 			new()
 			{
 				Size = 5,
 				Name = "Large Bird Aviary",
 				Icon = AVIARY_ICON,
+				Order = 5,
 			},
 		};
 	}

@@ -1,0 +1,13 @@
+﻿@if (building.IsStandard)
+{
+	<Enclosure Size=@building.Size Scale=@(building.IsSelected ? 2 : 1.5) IsProportional=true></Enclosure>
+}
+else
+{
+	<FontAwesome IconName="@building.Icon" Size=@(building.IsSelected ? "x-3" : "x-4")></FontAwesome>
+}
+
+@code {
+	[Parameter]
+	public BuildingModel building { get; set; }
+}

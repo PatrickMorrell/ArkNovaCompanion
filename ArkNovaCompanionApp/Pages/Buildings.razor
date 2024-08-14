@@ -2,9 +2,19 @@
 
 <h3>Buildings</h3>
 
-@foreach (BuildingModel building in BuildingService.Buildings)
+@foreach (bool isStandard in new bool[] { true, false })
 {
-	<div>@building.Name: @building.Amount</div>
+	<div class="d-flex">
+		@foreach (BuildingModel building in BuildingService.Buildings.Where(b => b.IsStandard == isStandard))
+		{
+			@for (int i = 0; i < building.Amount; i++)
+			{
+				<div class="mx-2">
+					<Building building=building></Building>
+				</div>
+			}
+		}
+	</div>
 }
 
 @code {
