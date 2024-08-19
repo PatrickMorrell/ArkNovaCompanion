@@ -22,27 +22,26 @@
 			@foreach (bool isStandard in new bool[] { true, false })
 			{
 				BuildingModel building = buildings.Where(b => b.IsStandard == isStandard && b.Order == i).First();
-				<div class="col">
-					@if (CanToggleSelected(building))
-					{
-						<div class="d-flex align-items-center justify-content-center @(building.IsSelected ? "text-primary" : "") mx-1">
-							<div @onclick="() => ToggleSelect(building)">
-								<Building building=building></Building>
-							</div>
-							<div class="square-2 rounded-2 text-bg-dark m-2">
-								<div class="container fs-4">@(building.Size)</div>
-							</div>
+				<div class="col d-flex justify-content-center">
+					<div class="row centre">
+						<div class="col-6">
+							@if (CanToggleSelected(building))
+							{
+								<div class="@(building.IsSelected ? "text-primary" : "")" @onclick="() => ToggleSelect(building)">
+									<Building building=building></Building>
+								</div>
+							}
+							else
+							{
+								<div class="opacity-50">
+									<Building building=building></Building>
+								</div>
+							}
 						</div>
-					}
-					else
-					{
-						<div class="d-flex align-items-center justify-content-center mx-1 opacity-50">
-							<Building building=building></Building>
-							<div class="square-2 rounded-2 text-bg-dark m-2">
-								<div class="container fs-4">@(building.Size)</div>
-							</div>
+						<div class="col-6">
+							<i class="bi bi-@(building.Size)-square-fill fs-1 px-1"></i>
 						</div>
-					}
+					</div>
 				</div>
 			}
 		</div>

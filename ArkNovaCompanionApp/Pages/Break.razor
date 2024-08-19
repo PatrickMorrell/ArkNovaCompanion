@@ -8,7 +8,7 @@
     @for (int i = 1; i <= start; i++)
     {
         <div class="square-1 rounded-3 @(i % 2 == 0 ? "text-bg-dark" : "text-bg-secondary") m-2">
-            <div class="container">
+            <div class="container centre">
                 @if (BreakService.BreakAmount == i)
                 {
                     <div @onclick="() => BreakService.AdvanceBreak()">
