@@ -17,5 +17,6 @@ builder.Services.AddScoped<IMoneyService, MoneyService>();
 builder.Services.AddScoped<IBuildingService, BuildingService>();
 builder.Services.AddScoped<IActionService, ActionService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IWorkerService, WorkerService>();
 
 await builder.Build().RunAsync();

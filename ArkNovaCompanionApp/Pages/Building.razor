@@ -1,13 +1,13 @@
-﻿@if (building.IsStandard)
+﻿@if (ThisBuilding.IsStandard)
 {
-	<Enclosure Size=@building.Size Scale=@(building.IsSelected ? 2 : 1.5) IsProportional=true></Enclosure>
+	<Enclosure Size=@ThisBuilding.Size Scale=@(ThisBuilding.IsSelected ? 2 : 1.5) IsProportional=true></Enclosure>
 }
 else
 {
-	<FontAwesome IconName="@building.Icon" Size=@(building.IsSelected ? "x-3" : "x-4")></FontAwesome>
+	<FontAwesome IconName="@ThisBuilding.Icon" Size=@(ThisBuilding.IsSelected ? "x-3" : "x-4")></FontAwesome>
 }
 
 @code {
 	[Parameter]
-	public BuildingModel building { get; set; }
+	public BuildingModel ThisBuilding { get; set; }
 }

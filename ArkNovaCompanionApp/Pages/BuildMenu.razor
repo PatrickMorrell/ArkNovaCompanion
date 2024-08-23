@@ -28,13 +28,13 @@
 							@if (CanToggleSelected(building))
 							{
 								<div class="@(building.IsSelected ? "text-primary" : "")" @onclick="() => ToggleSelect(building)">
-									<Building building=building></Building>
+									<Building ThisBuilding=building></Building>
 								</div>
 							}
 							else
 							{
 								<div class="opacity-50">
-									<Building building=building></Building>
+									<Building ThisBuilding=building></Building>
 								</div>
 							}
 						</div>

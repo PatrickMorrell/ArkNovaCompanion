@@ -9,4 +9,6 @@ public interface ICollectionService
 	List<CoinModel> GetCoinsDefault();
 
 	List<BuildingModel> GetBuildingsDefault();
+
+	List<WorkerModel> GetWorkersDefault();
 }

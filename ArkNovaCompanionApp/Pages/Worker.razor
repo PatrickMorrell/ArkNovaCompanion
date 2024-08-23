@@ -1,0 +1,42 @@
+﻿@inject IWorkerService WorkerService
+
+@{
+	var thisWorker = WorkerService.Workers[WorkerNumber];
+	int activeWorkers = GetActiveWorkerCount();
+}
+
+@if (ShowActive)
+{
+	<div class="@(activeWorkers > WorkerNumber ? "visible" : "invisible") @(thisWorker.IsUsed ? "text-success" : "") m-2" @onclick="() => WorkerService.ToggleWorker(thisWorker)">
+		<FontAwesome IconName="user" Size="x-1"></FontAwesome>
+	</div>
+}
+else
+{
+	<div class="@(activeWorkers < (4 - WorkerNumber) ? "visible" : "invisible") m-2">
+		<FontAwesome IconName="user" Size="x-1"></FontAwesome>
+	</div>
+}
+
+@code {
+	[Parameter]
+	public int WorkerNumber { get; set; }
+
+	[Parameter]
+	public bool ShowActive { get; set; }
+
+	protected override void OnInitialized()
+	{
+		WorkerService.OnWorkersChanged += StateHasChanged;
+	}
+
+	public void Dispose()
+	{
+		WorkerService.OnWorkersChanged -= StateHasChanged;
+	}
+
+	private int GetActiveWorkerCount()
+	{
+		return WorkerService.Workers.Count(w => w.IsActive);
+	}
+}

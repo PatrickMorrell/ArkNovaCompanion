@@ -157,4 +157,15 @@ public class CollectionService : ICollectionService
 			},
 		};
 	}
+
+	public List<WorkerModel> GetWorkersDefault()
+	{
+		List<WorkerModel> workers = new List<WorkerModel>();
+		for (int i = 0; i < 4; i++)
+		{
+			workers.Add(new WorkerModel());
+		}
+
+		return workers;
+	}
 }
