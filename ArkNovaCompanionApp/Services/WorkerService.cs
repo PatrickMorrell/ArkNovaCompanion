@@ -34,7 +34,7 @@ public class WorkerService : IWorkerService
 	{
 		if (Workers.Count(w => w.IsActive) > 0)
 		{
-			var worker = Workers.Where(w => w.IsActive).First();
+			var worker = Workers.Where(w => w.IsActive).Last();
 			worker.IsActive = false;
 			worker.IsUsed = false;
 			OnWorkersChanged?.Invoke();
@@ -51,6 +51,7 @@ public class WorkerService : IWorkerService
 		worker.IsUsed = !worker.IsUsed;
 		OnWorkersChanged?.Invoke();
 	}
+
 	public async Task GetStoredWorkers()
 	{
 		Workers = await _storageService.GetStoredList("workers", Workers);

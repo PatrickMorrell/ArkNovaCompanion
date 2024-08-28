@@ -22,6 +22,11 @@ public class StorageService : IStorageService
 		await _jsRuntime.InvokeVoidAsync("setItem", key, value);
 	}
 
+	public async Task ClearStorage()
+	{
+		await _jsRuntime.InvokeVoidAsync("clearStorage");
+	}
+
 	public async Task<int> GetStoredNumber(string key)
 	{
 		string storedValue = await GetFromStorage(key);

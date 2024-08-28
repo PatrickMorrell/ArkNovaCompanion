@@ -1,44 +1,19 @@
 ﻿@inject IWorkerService WorkerService
 
-<div class="d-flex">
-	<div class="flex-row">
-		<Worker WorkerNumber=0></Worker>
-		<Worker WorkerNumber=1></Worker>
-	</div>
-	<div class="flex-row">
-		<Worker WorkerNumber=2></Worker>
-		<Worker WorkerNumber=3></Worker>
-	</div>
-	<div class="flex-row">
-		<div class="d-flex flex-column justify-content-center mx-5">
-			<button class="btn btn-primary square-1 m-2" @onclick="() => WorkerService.AddWorker()">
-				<FontAwesome IconName="caret-right"></FontAwesome>
-			</button>
+<div class="workers position-relative">
+	<div class="d-flex centre" @onclick="() => WorkerService.AddWorker()">
+		<div class="flex-row">
+			<Worker WorkerNumber=0></Worker>
+			<Worker WorkerNumber=1></Worker>
 		</div>
-		<div class="d-flex flex-column justify-content-center mx-5">
-			<button class="btn btn-primary square-1 m-2" @onclick="() => WorkerService.RemoveWorker()">
-				<FontAwesome IconName="caret-left"></FontAwesome>
-			</button>
+		<div class="flex-row">
+			<Worker WorkerNumber=2></Worker>
+			<Worker WorkerNumber=3></Worker>
 		</div>
 	</div>
-	<div class="flex-row">
-		<Worker WorkerNumber=0 ShowActive=true></Worker>
-		<Worker WorkerNumber=1 ShowActive=true></Worker>
-	</div>
-	<div class="flex-row">
-		<Worker WorkerNumber=2 ShowActive=true></Worker>
-		<Worker WorkerNumber=3 ShowActive=true></Worker>
+	<div class="position-absolute top-100 start-100 translate-middle">
+		<button class="btn btn-danger" @onclick="() => WorkerService.RemoveWorker()">
+			<FontAwesome IconName="minus" Size="3"></FontAwesome>
+		</button>
 	</div>
 </div>
-
-
-@code {
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			await WorkerService.GetStoredWorkers();
-			StateHasChanged();
-		}
-	}
-}

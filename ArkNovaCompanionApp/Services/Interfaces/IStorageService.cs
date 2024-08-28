@@ -6,7 +6,9 @@ public interface IStorageService
 
     Task SaveToStorage(string key, string value);
 
-    Task<int> GetStoredNumber(string key);
+    Task ClearStorage();
+
+	Task<int> GetStoredNumber(string key);
 
     Task<List<T>> GetStoredList<T>(string key, List<T> currentList);
 
