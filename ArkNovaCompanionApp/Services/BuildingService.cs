@@ -9,25 +9,44 @@ namespace ArkNovaCompanionApp.Services
 		private readonly IStorageService _storageService;
 		private readonly ICollectionService _collectionService;
 
-		private List<BuildingModel> _buildings;
 		public BuildingService(IStorageService storageService, ICollectionService collectionService)
 		{
 			_storageService = storageService;
 			_collectionService = collectionService;
-			Buildings = _collectionService.GetBuildingsDefault();
+			BuildingTypes = _collectionService.GetBuildingTypes();
 			OnBuildingsChanged += async () => await UpdateStoredBuildings();
 		}
 
 		public event Action OnBuildingsChanged;
 
-		public List<BuildingModel> Buildings { get; set; }
+		public List<BuildingTypeModel> BuildingTypes { get; set; }
+		public List<BuildingModel> Buildings { get; set; } = [];
 
-		public async Task SaveBuildings(List<BuildingModel> selectedBuildings)
+		public void SaveBuildings(List<BuildingTypeModel> selectedBuildings)
 		{
 			foreach (var building in selectedBuildings)
 			{
-				Buildings.First(b => b.Name == building.Name).Amount++;
+				Buildings.Add(new() 
+				{ 
+					Name = building.Name,
+					Size = building.Size,
+					Icon = building.Icon,
+					IsStandard = building.IsStandard,
+					Order = building.Order,
+				});
 			}
+
+			OnBuildingsChanged?.Invoke();
+		}
+
+		public void ToggleOccupied(BuildingModel building)
+		{
+			if (!building.IsStandard)
+			{
+				return;
+			}
+
+			building.IsOccupied = !building.IsOccupied;
 			OnBuildingsChanged?.Invoke();
 		}
 

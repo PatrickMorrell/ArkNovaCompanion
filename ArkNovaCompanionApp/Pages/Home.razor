@@ -3,10 +3,9 @@
 @*
     New Features
         - keep track of number of cards in hand
-        - automate break actions
+        - automate income from appeal
         - add modifiers to action cards
         - record active bonuses from supporting CPs
-        - track number of enclosures of each size and if occupied
         - create drawer for association board
         - keep log of states 
         ------------------------------------------------------------
@@ -19,7 +18,9 @@
 <PageTitle>Home</PageTitle>
 
 <div class="d-flex justify-content-end">
-    <button class="btn btn-danger" @onclick="() => StorageService.ClearStorage()">Clear All</button>
+    <button class="btn btn-danger" @onclick="() => StorageService.ClearStorage()">
+        <FontAwesome IconName="trash-can"></FontAwesome>
+    </button>
 </div>
 
 <Actions></Actions>
@@ -31,8 +32,6 @@
 <Break></Break>
 
 <XTokens></XTokens>
-
-<ConservationBonuses></ConservationBonuses>
 
 <ScoreTracks></ScoreTracks>
 

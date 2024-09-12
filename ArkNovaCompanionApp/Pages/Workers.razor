@@ -1,14 +1,22 @@
 ﻿@inject IWorkerService WorkerService
 
 <div class="workers position-relative">
-	<div class="d-flex centre" @onclick="() => WorkerService.AddWorker()">
-		<div class="flex-row">
-			<Worker WorkerNumber=0></Worker>
-			<Worker WorkerNumber=1></Worker>
+	<div class="container">
+		<div class="row">
+			<div class="col-6 centre">
+				<Worker WorkerNumber=0></Worker>
+			</div>
+			<div class="col-6 centre">
+				<Worker WorkerNumber=1></Worker>
+			</div>
 		</div>
-		<div class="flex-row">
-			<Worker WorkerNumber=2></Worker>
-			<Worker WorkerNumber=3></Worker>
+		<div class="row">
+			<div class="col-6 centre">
+				<Worker WorkerNumber=2></Worker>
+			</div>
+			<div class="col-6 centre">
+				<Worker WorkerNumber=3></Worker>
+			</div>
 		</div>
 	</div>
 	<div class="position-absolute top-100 start-100 translate-middle">

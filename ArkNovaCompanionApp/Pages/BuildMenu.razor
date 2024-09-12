@@ -21,20 +21,20 @@
 		<div class="container row my-2">
 			@foreach (bool isStandard in new bool[] { true, false })
 			{
-				BuildingModel building = buildings.Where(b => b.IsStandard == isStandard && b.Order == i).First();
+				BuildingTypeModel building = buildings.Where(b => b.IsStandard == isStandard && b.Order == i).First();
 				<div class="col d-flex justify-content-center">
 					<div class="row centre">
 						<div class="col-6">
 							@if (CanToggleSelected(building))
 							{
 								<div class="@(building.IsSelected ? "text-primary" : "")" @onclick="() => ToggleSelect(building)">
-									<Building ThisBuilding=building></Building>
+									<BuildingType Model=building></BuildingType>
 								</div>
 							}
 							else
 							{
 								<div class="opacity-50">
-									<Building ThisBuilding=building></Building>
+									<BuildingType Model=building></BuildingType>
 								</div>
 							}
 						</div>
@@ -64,21 +64,21 @@
 	[Parameter]
 	public bool IsUpgraded { get; set; }
 
-	List<BuildingModel> buildings;
+	List<BuildingTypeModel> buildings;
 
 	public int SizeRemaining;
 
 	protected override void OnInitialized()
 	{
-		buildings = CollectionService.GetBuildingsDefault();
+		buildings = CollectionService.GetBuildingTypes();
 	}
 
-	private void ToggleSelect(BuildingModel building)
+	private void ToggleSelect(BuildingTypeModel building)
 	{
 		building.IsSelected = !building.IsSelected && (GetSelectedTotal() + building.Size <= MaxSize);
 	}
 
-	private bool CanToggleSelected(BuildingModel building)
+	private bool CanToggleSelected(BuildingTypeModel building)
 	{
 		if (building.IsSelected)
 		{
@@ -102,12 +102,12 @@
 		}
 	}
 
-	private bool SpecialEnclosureExists(BuildingModel building)
+	private bool SpecialEnclosureExists(BuildingTypeModel building)
 	{
 		string[] specials = { "Petting Zoo", "Reptile House", "Large Bird Aviary" };
 		foreach (string enclosure in specials)
 		{
-			if (building.Name == enclosure && BuildingService.Buildings.Exists(b => b.Name == enclosure && b.Amount > 0))
+			if (building.Name == enclosure && BuildingService.Buildings is not null && BuildingService.Buildings.Exists(b => b.Name == enclosure))
 			{
 				return true;
 			}
@@ -121,9 +121,9 @@
 		return buildings.Where(b => b.IsSelected).Sum(b => b.Size);
 	}
 
-	private async Task OnConfirmClick()
+	private void OnConfirmClick()
 	{
-		await BuildingService.SaveBuildings(buildings.Where(b => b.IsSelected).ToList());
+		BuildingService.SaveBuildings(buildings.Where(b => b.IsSelected).ToList());
 		buildings.ForEach(b => b.IsSelected = false);
 		ActionService.MoveAction(ActionNames.Build);
 	}

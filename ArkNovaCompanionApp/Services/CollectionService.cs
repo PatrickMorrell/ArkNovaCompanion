@@ -76,7 +76,7 @@ public class CollectionService : ICollectionService
 		};
 	}
 
-	public List<BuildingModel> GetBuildingsDefault()
+	public List<BuildingTypeModel> GetBuildingTypes()
 	{
 		return new()
 		{
@@ -84,7 +84,6 @@ public class CollectionService : ICollectionService
 			{
 				Size = 1,
 				Name = "Standard Size One",
-				Icon = "dice-one",
 				IsStandard = true,
 				Order = 1,
 			},
@@ -92,7 +91,6 @@ public class CollectionService : ICollectionService
 			{
 				Size = 2,
 				Name = "Standard Size Two",
-				Icon = "dice-two",
 				IsStandard = true,
 				Order = 2,
 			},
@@ -100,7 +98,6 @@ public class CollectionService : ICollectionService
 			{
 				Size = 3,
 				Name = "Standard Size Three",
-				Icon = "dice-three",
 				IsStandard = true,
 				Order = 3,
 			},
@@ -108,7 +105,6 @@ public class CollectionService : ICollectionService
 			{
 				Size = 4,
 				Name = "Standard Size Four",
-				Icon = "dice-four",
 				IsStandard = true,
 				Order = 4,
 			},
@@ -116,7 +112,6 @@ public class CollectionService : ICollectionService
 			{
 				Size = 5,
 				Name = "Standard Size Five",
-				Icon = "dice-five",
 				IsStandard = true,
 				Order = 5,
 			},

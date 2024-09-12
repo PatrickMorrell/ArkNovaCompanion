@@ -6,10 +6,14 @@ namespace ArkNovaCompanionApp.Services.Interfaces
 	{
 		event Action OnBuildingsChanged;
 
-		List<BuildingModel> Buildings { get; set; }
+		public List<BuildingTypeModel> BuildingTypes { get; set; }
 
-        Task SaveBuildings(List<BuildingModel> selectedBuildings);
+		public List<BuildingModel> Buildings { get; set; }
 
-        Task GetStoredBuildings();
+		void SaveBuildings(List<BuildingTypeModel> selectedBuildings);
+
+		void ToggleOccupied(BuildingModel building);
+
+		Task GetStoredBuildings();
     }
 }

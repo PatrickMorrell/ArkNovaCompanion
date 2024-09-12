@@ -5,7 +5,7 @@
 	int activeWorkers = GetActiveWorkerCount();
 }
 
-<div class="@(activeWorkers > WorkerNumber ? "text-dark" : "text-primary")">
+<div class="@(activeWorkers > WorkerNumber ? "text-dark" : "text-primary")" @onclick="() => AddWorker(activeWorkers)">
 	@if (thisWorker.IsUsed)
 	{
 		<div class="text-light m-2" @onclick="() => WorkerService.ToggleWorker(thisWorker)">
@@ -47,5 +47,15 @@
 	private int GetActiveWorkerCount()
 	{
 		return WorkerService.Workers.Count(w => w.IsActive);
+	}
+
+	private void AddWorker(int activeWorkers)
+	{
+		if (activeWorkers > WorkerNumber)
+		{
+			return;
+		}
+
+		WorkerService.AddWorker();
 	}
 }

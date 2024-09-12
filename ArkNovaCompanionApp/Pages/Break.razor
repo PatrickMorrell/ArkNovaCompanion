@@ -1,4 +1,6 @@
 ﻿@inject IBreakService BreakService
+@inject ITokenService TokenService
+@inject IWorkerService WorkerService
 @inject IJSRuntime JSRuntime
 
 <div class="row">
@@ -28,13 +30,19 @@
 </div>
 
 <Modal Id="breakModal" @ref="modal">
-    <Title>Break!</Title>
+    <Title>Break Triggered!</Title>
     <Body>
-        Would you like to trigger a break?
+        <ol>
+            <li>Discard down to hand limits (3 or 5)</li>
+            <li>Remove tokens from Action cards</li>
+            <li>Return workers to players' supplies and replenish partner zoos and universities</li>
+            <li>Discard folders 1 and 2 from the display and replenish from the draw pile</li>
+            <li>Collect income</li>
+            <li>Return the break token to its starting position</li>
+        </ol>
     </Body>
     <Footer>
-        <button type="button" class="btn btn-primary">Yes</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="() => OnBreakTriggered()">Ok</button>
     </Footer>
 </Modal>
 
@@ -61,5 +69,12 @@
     {
         BreakService.OnBreakChanged -= StateHasChanged;
         BreakService.OnBreakTriggered -= async () => await modal.Open();
+    }
+
+    private void OnBreakTriggered()
+    {
+        TokenService.AddToken();
+        WorkerService.ReturnWorkers();
+        BreakService.ResetBreak(start);
     }
 }

@@ -65,7 +65,7 @@ public class ActionService : IActionService
 	public async Task GetStoredActions()
     {
         Actions = await _storageService.GetStoredList<ActionModel>("actions");
-        if (Actions == null)
+        if (Actions is null)
         {
             SetupActions();
         }

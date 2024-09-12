@@ -1,20 +1,18 @@
 ﻿@inject IBuildingService BuildingService
 
-<h3>Buildings</h3>
-
-@foreach (bool isStandard in new bool[] { true, false })
+@if (BuildingService.Buildings is not null)
 {
-	<div class="d-flex">
-		@foreach (BuildingModel building in BuildingService.Buildings.Where(b => b.IsStandard == isStandard))
-		{
-			@for (int i = 0; i < building.Amount; i++)
+	@foreach (bool isStandard in new bool[] { true, false })
+	{
+		<div class="d-flex">
+			@foreach (BuildingModel building in BuildingService.Buildings.Where(b => b.IsStandard == isStandard).OrderBy(b => b.Order))
 			{
-				<div class="mx-2">
-					<Building ThisBuilding=building></Building>
+				<div class="@(building.IsOccupied ? "text-primary" : "text-dark") mx-2" @onclick="() => BuildingService.ToggleOccupied(building)">
+					<Building Model=building></Building>
 				</div>
 			}
-		}
-	</div>
+		</div>
+	}
 }
 
 @code {
@@ -30,6 +28,11 @@
 			await BuildingService.GetStoredBuildings();
 			StateHasChanged();
 		}
+	}
+
+	private void ToggleSelect(BuildingTypeModel building)
+	{
+		building.IsSelected = !building.IsSelected;
 	}
 
 	public void Dispose()

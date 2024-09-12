@@ -44,7 +44,7 @@ public class StorageService : IStorageService
 		if (!string.IsNullOrEmpty(storedList))
 		{
 			var listData = JsonSerializer.Deserialize<List<T>>(storedList);
-			if (listData != null)
+			if (listData is not null)
 			{
 				list = listData;
 			}
@@ -59,11 +59,12 @@ public class StorageService : IStorageService
         if (!string.IsNullOrEmpty(storedList))
         {
             var listData = JsonSerializer.Deserialize<List<T>>(storedList);
-            if (listData != null)
+            if (listData is not null)
             {
                 list = listData;
             }
         }
+
         return list;
     }
 }

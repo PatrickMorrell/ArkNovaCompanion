@@ -8,7 +8,7 @@ public interface ICollectionService
 
 	List<CoinModel> GetCoinsDefault();
 
-	List<BuildingModel> GetBuildingsDefault();
+	List<BuildingTypeModel> GetBuildingTypes();
 
 	List<WorkerModel> GetWorkersDefault();
 }

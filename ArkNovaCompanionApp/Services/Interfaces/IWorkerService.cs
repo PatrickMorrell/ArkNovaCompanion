@@ -12,5 +12,6 @@ namespace ArkNovaCompanionApp.Services.Interfaces
         Task GetStoredWorkers();
         void RemoveWorker();
         void ToggleWorker(WorkerModel worker);
+        void ReturnWorkers();
     }
 }

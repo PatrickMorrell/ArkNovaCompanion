@@ -1,6 +1,6 @@
 ﻿namespace ArkNovaCompanionApp.Models;
 
-public class BuildingModel
+public class BuildingTypeModel
 {
 	public string Name { get; set; }
 
@@ -10,7 +10,7 @@ public class BuildingModel
 
 	public bool IsStandard { get; set; }
 
-	public bool IsOccupied { get; set; }
+	public bool IsSelected { get; set; }
 
 	public int Order { get; set; }
 }
