@@ -1,20 +1,18 @@
 ﻿using ArkNovaCompanionApp.Models;
-using ArkNovaCompanionApp.Services.Interfaces;
-using System.Text.Json;
 
 namespace ArkNovaCompanionApp.Services;
 
 public class WorkerService : IWorkerService
 {
-    private readonly IStorageService _storageService;
+    private readonly ILocalStorageService _storageService;
     private readonly ICollectionService _collectionService;
 
-    public WorkerService(IStorageService storageService, ICollectionService collectionService)
+    public WorkerService(ILocalStorageService storageService, ICollectionService collectionService)
     {
         _storageService = storageService;
         _collectionService = collectionService;
         Workers = _collectionService.GetWorkersDefault();
-        OnWorkersChanged += async () => await UpdateStoredWorkers();
+		OnWorkersChanged += async () => await UpdateStoredWorkers();
     }
 
     public List<WorkerModel> Workers { get; set; }
@@ -64,11 +62,11 @@ public class WorkerService : IWorkerService
 
     public async Task GetStoredWorkers()
     {
-        Workers = await _storageService.GetStoredList("workers", Workers);
-    }
+        Workers = await _storageService.GetItemAsync<List<WorkerModel>>("workers") ?? _collectionService.GetWorkersDefault();
+	}
 
     private async Task UpdateStoredWorkers()
     {
-        await _storageService.SaveToStorage("workers", JsonSerializer.Serialize(Workers));
+        await _storageService.SetItemAsync("workers", Workers);
     }
 }

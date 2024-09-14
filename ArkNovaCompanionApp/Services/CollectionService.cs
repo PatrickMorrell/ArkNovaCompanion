@@ -1,6 +1,5 @@
 ﻿using ArkNovaCompanionApp.Constants;
 using ArkNovaCompanionApp.Models;
-using ArkNovaCompanionApp.Services.Interfaces;
 
 namespace ArkNovaCompanionApp.Services;
 

@@ -1,27 +1,30 @@
 ﻿@inject IWorkerService WorkerService
 
-<div class="workers position-relative">
-	<div class="container">
-		<div class="row">
-			<div class="col-6 centre">
-				<Worker WorkerNumber=0></Worker>
+@if (WorkerService.Workers is not null)
+{
+	<div class="workers position-relative">
+		<div class="container">
+			<div class="row">
+				<div class="col-6 centre">
+					<Worker WorkerNumber=0></Worker>
+				</div>
+				<div class="col-6 centre">
+					<Worker WorkerNumber=1></Worker>
+				</div>
 			</div>
-			<div class="col-6 centre">
-				<Worker WorkerNumber=1></Worker>
+			<div class="row">
+				<div class="col-6 centre">
+					<Worker WorkerNumber=2></Worker>
+				</div>
+				<div class="col-6 centre">
+					<Worker WorkerNumber=3></Worker>
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-6 centre">
-				<Worker WorkerNumber=2></Worker>
-			</div>
-			<div class="col-6 centre">
-				<Worker WorkerNumber=3></Worker>
-			</div>
+		<div class="position-absolute top-100 start-100 translate-middle">
+			<button class="btn btn-danger" @onclick="() => WorkerService.RemoveWorker()">
+				<FontAwesome IconName="minus" Size="3"></FontAwesome>
+			</button>
 		</div>
-	</div>
-	<div class="position-absolute top-100 start-100 translate-middle">
-		<button class="btn btn-danger" @onclick="() => WorkerService.RemoveWorker()">
-			<FontAwesome IconName="minus" Size="3"></FontAwesome>
-		</button>
-	</div>
-</div>
+	</div>	
+}

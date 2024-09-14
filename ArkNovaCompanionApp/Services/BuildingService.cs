@@ -1,15 +1,13 @@
 ﻿using ArkNovaCompanionApp.Models;
-using ArkNovaCompanionApp.Services.Interfaces;
-using System.Text.Json;
 
 namespace ArkNovaCompanionApp.Services
 {
 	public class BuildingService : IBuildingService
 	{
-		private readonly IStorageService _storageService;
+		private readonly ILocalStorageService _storageService;
 		private readonly ICollectionService _collectionService;
 
-		public BuildingService(IStorageService storageService, ICollectionService collectionService)
+		public BuildingService(ILocalStorageService storageService, ICollectionService collectionService)
 		{
 			_storageService = storageService;
 			_collectionService = collectionService;
@@ -20,7 +18,7 @@ namespace ArkNovaCompanionApp.Services
 		public event Action OnBuildingsChanged;
 
 		public List<BuildingTypeModel> BuildingTypes { get; set; }
-		public List<BuildingModel> Buildings { get; set; } = [];
+		public List<BuildingModel> Buildings { get; set; }
 
 		public void SaveBuildings(List<BuildingTypeModel> selectedBuildings)
 		{
@@ -52,12 +50,12 @@ namespace ArkNovaCompanionApp.Services
 
 		public async Task GetStoredBuildings()
 		{
-			Buildings = await _storageService.GetStoredList("buildings", Buildings);
+			Buildings = await _storageService.GetItemAsync<List<BuildingModel>>("buildings") ?? [];
 		}
 
 		private async Task UpdateStoredBuildings()
 		{
-			await _storageService.SaveToStorage("buildings", JsonSerializer.Serialize(Buildings));
+			await _storageService.SetItemAsync("buildings", Buildings);
 		}
 	}
 }

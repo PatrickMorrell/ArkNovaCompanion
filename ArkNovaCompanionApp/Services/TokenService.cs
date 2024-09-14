@@ -1,12 +1,10 @@
-﻿using ArkNovaCompanionApp.Services.Interfaces;
-
-namespace ArkNovaCompanionApp.Services;
+﻿namespace ArkNovaCompanionApp.Services;
 
 public class TokenService : ITokenService
 {
-    private readonly IStorageService _storageService;
+    private readonly ILocalStorageService _storageService;
     private int _tokenAmount;
-    public TokenService(IStorageService storageService)
+    public TokenService(ILocalStorageService storageService)
     {
         _storageService = storageService;
         OnTokensChanged += async () => await UpdateStoredTokens();
@@ -45,11 +43,11 @@ public class TokenService : ITokenService
 
     public async Task GetStoredTokens()
     {
-		TokenAmount = await _storageService.GetStoredNumber("tokens");
+		TokenAmount = await _storageService.GetItemAsync<int>("tokens");
     }
 
     private async Task UpdateStoredTokens()
     {
-        await _storageService.SaveToStorage("tokens", TokenAmount.ToString());
+        await _storageService.SetItemAsync("tokens", TokenAmount);
     }
 }

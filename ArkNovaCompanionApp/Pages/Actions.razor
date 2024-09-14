@@ -96,18 +96,11 @@
 	private bool BuildUpgraded;
 	private int UsedTokens;
 
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
 		ActionService.OnActionsChanged += StateHasChanged;
-	}
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			await ActionService.GetStoredActions();
-			StateHasChanged();
-		}
+		await ActionService.GetStoredActions();
+		StateHasChanged();
 	}
 
 	public void Dispose()

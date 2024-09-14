@@ -1,4 +1,5 @@
-﻿@inject IStorageService StorageService;
+﻿@inject ILocalStorageService StorageService;
+@inject NavigationManager Navigation;
 
 @*
     New Features
@@ -18,7 +19,7 @@
 <PageTitle>Home</PageTitle>
 
 <div class="d-flex justify-content-end">
-    <button class="btn btn-danger" @onclick="() => StorageService.ClearStorage()">
+    <button class="btn btn-danger" @onclick="() => OnStorageClear()">
         <FontAwesome IconName="trash-can"></FontAwesome>
     </button>
 </div>
@@ -36,3 +37,11 @@
 <ScoreTracks></ScoreTracks>
 
 <Workers></Workers>
+
+@code {
+    private async Task OnStorageClear()
+    {
+        await StorageService.ClearAsync();
+        Navigation.NavigateTo(Navigation.Uri, true);
+    }
+}

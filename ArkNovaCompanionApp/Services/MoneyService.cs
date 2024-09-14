@@ -1,15 +1,13 @@
 ﻿using ArkNovaCompanionApp.Models;
-using ArkNovaCompanionApp.Services.Interfaces;
-using System.Text.Json;
 
 namespace ArkNovaCompanionApp.Services;
 
 public class MoneyService : IMoneyService
 {
-	private readonly IStorageService _storageService;
+	private readonly ILocalStorageService _storageService;
 	private readonly ICollectionService _collectionService;
 
-	public MoneyService(IStorageService storageService, ICollectionService collectionService)
+	public MoneyService(ILocalStorageService storageService, ICollectionService collectionService)
 	{
 		_storageService = storageService;
 		_collectionService = collectionService;
@@ -44,11 +42,12 @@ public class MoneyService : IMoneyService
 
 	public async Task GetStoredMoney()
 	{
-		Coins = await _storageService.GetStoredList("coins", Coins);
+		var coins = await _storageService.GetItemAsync<List<CoinModel>>("coins");
+		Coins = coins ?? _collectionService.GetCoinsDefault();
 	}
 
 	private async Task UpdateStoredMoney()
 	{
-		await _storageService.SaveToStorage("coins", JsonSerializer.Serialize(Coins));
+		await _storageService.SetItemAsync("coins", Coins);
 	}
 }

@@ -1,16 +1,15 @@
 ﻿using ArkNovaCompanionApp.Constants;
 using ArkNovaCompanionApp.Models;
-using ArkNovaCompanionApp.Services.Interfaces;
-using System.Text.Json;
 
 namespace ArkNovaCompanionApp.Services;
 
 public class ActionService : IActionService
 {
-    private readonly IStorageService _storageService;
+    private readonly ILocalStorageService _storageService;
     private readonly ICollectionService _collectionService;
     private List<ActionModel> _actions;
-    public ActionService(IStorageService storageService, ICollectionService collectionService)
+
+    public ActionService(ILocalStorageService storageService, ICollectionService collectionService)
     {
         _storageService = storageService;
         _collectionService = collectionService;
@@ -64,7 +63,7 @@ public class ActionService : IActionService
 
 	public async Task GetStoredActions()
     {
-        Actions = await _storageService.GetStoredList<ActionModel>("actions");
+        Actions = await _storageService.GetItemAsync<List<ActionModel>>("actions");
         if (Actions is null)
         {
             SetupActions();
@@ -73,6 +72,6 @@ public class ActionService : IActionService
 
     private async Task UpdateStoredActions()
     {
-        await _storageService.SaveToStorage("actions", JsonSerializer.Serialize(Actions));
+        await _storageService.SetItemAsync("actions", Actions);
     }
 }

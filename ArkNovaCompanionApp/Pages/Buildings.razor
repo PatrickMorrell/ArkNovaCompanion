@@ -2,7 +2,7 @@
 
 @if (BuildingService.Buildings is not null)
 {
-	@foreach (bool isStandard in new bool[] { true, false })
+	foreach (bool isStandard in new bool[] { true, false })
 	{
 		<div class="d-flex">
 			@foreach (BuildingModel building in BuildingService.Buildings.Where(b => b.IsStandard == isStandard).OrderBy(b => b.Order))
@@ -16,18 +16,11 @@
 }
 
 @code {
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
 		BuildingService.OnBuildingsChanged += StateHasChanged;
-	}
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			await BuildingService.GetStoredBuildings();
-			StateHasChanged();
-		}
+		await BuildingService.GetStoredBuildings();
+		StateHasChanged();
 	}
 
 	private void ToggleSelect(BuildingTypeModel building)

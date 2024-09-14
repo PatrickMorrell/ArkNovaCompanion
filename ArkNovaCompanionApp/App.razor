@@ -18,14 +18,4 @@
     window.closeModal = (modalId) => {
         bootstrap.Modal.getInstance(`#${modalId}`).hide();
     }
-    window.getItem = (key) => {
-        return window.localStorage.getItem(key);
-    }
-    window.setItem = (key, value) => {
-        window.localStorage.setItem(key, value);
-    }
-    window.clearStorage = () => {
-        window.localStorage.clear();
-        window.location.reload(true);
-    }
 </script>

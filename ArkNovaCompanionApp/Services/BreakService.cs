@@ -1,12 +1,10 @@
-﻿using ArkNovaCompanionApp.Services.Interfaces;
-
-namespace ArkNovaCompanionApp.Services;
+﻿namespace ArkNovaCompanionApp.Services;
 
 public class BreakService : IBreakService
 {
-	private readonly IStorageService _storageService;
+	private readonly ILocalStorageService _storageService;
 	private int _breakAmount;
-	public BreakService(IStorageService storageService)
+	public BreakService(ILocalStorageService storageService)
 	{
 		_storageService = storageService;
         OnBreakChanged += async () => await UpdateStoredBreak();
@@ -46,12 +44,12 @@ public class BreakService : IBreakService
 
 	public async Task GetStoredBreak(int amount)
 	{
-		int breakAmount = await _storageService.GetStoredNumber("break");
+		int breakAmount = await _storageService.GetItemAsync<int>("break");
 		BreakAmount = breakAmount > 0 ? breakAmount : amount;
 	}
 
 	private async Task UpdateStoredBreak()
 	{
-		await _storageService.SaveToStorage("break", BreakAmount.ToString());
+		await _storageService.SetItemAsync("break", BreakAmount);
 	}
 }

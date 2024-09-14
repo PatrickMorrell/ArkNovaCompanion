@@ -45,18 +45,11 @@
 </div>
 
 @code {
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
 		TokenService.OnTokensChanged += StateHasChanged;
-	}
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			await TokenService.GetStoredTokens();
-			StateHasChanged();
-		}
+		await TokenService.GetStoredTokens();
+		StateHasChanged();
 	}
 
 	public void Dispose()
