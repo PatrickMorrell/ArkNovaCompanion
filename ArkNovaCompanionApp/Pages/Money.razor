@@ -5,60 +5,66 @@
 
 @if (MoneyService.Coins is not null)
 {
-	foreach (var coin in MoneyService.Coins)
-	{
-		<div class="d-flex position-relative">
-			<button class="btn btn-primary m-2" @onclick="() => MoneyService.AddMoney(coin)">
-				<div class="d-flex flex-column centre">
-					<div class="square-2 rounded-2 border border-2">
-						<div class="container centre fs-5">@coin.Value</div>
-					</div>
-					<FontAwesome IconName="hand-holding"></FontAwesome>
-				</div>
-			</button>
-			@for (int i = 1; i <= coin.Amount; i++)
-			{
-				@if (i == 1)
-				{
-					<div class="position-absolute align-items-center justify-content-center square-1 rounded-4 bg-warning border border-2 border-dark m-2"
-						 style="left: 5rem; top: 1rem;" @onclick="() => MoneyService.RemoveMoney(coin)">
-						<div class="container centre fs-2">@coin.Value</div>
-					</div>
-				}
-				else
-				{
-					<div class="position-absolute square-1 rounded-4 bg-warning border border-2 border-dark m-2"
-						 style="left: @(4 + i)rem; top: 1rem; z-index: -@i;">
-					</div>
-				}
-			}
-		</div>
-	}
+    foreach (var coin in MoneyService.Coins)
+    {
+        <div class="row position-relative">
+            <div class="col">
+                <div class="square rounded-3 bg-dodgerblue m-2" @onclick="() => MoneyService.AddMoney(coin)">
+                    <div class="d-flex flex-column centre text-light">
+                        <div style="z-index:1;">
+                            <FontAwesome IconName="hand-holding" Size="x-1"></FontAwesome>
+                        </div>
+                        <div class="position-absolute square-1 rounded-4 border border-4">
+                            <strong class="container centre fs-2">@coin.Value</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col position-relative">
+
+                @for (int i = 1; i <= coin.Amount; i++)
+                {
+                    @if (i == 1)
+                    {
+                        <div class="position-absolute square-1 rounded-4 bg-warning border border-2 border-dark m-2"
+                             style="left: @(i)rem; top: 25%;" @onclick="() => MoneyService.RemoveMoney(coin)">
+                            <strong class="container centre no-select fs-2">@coin.Value</strong>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="position-absolute square-1 rounded-4 bg-warning border border-2 border-dark m-2"
+                             style="left: @(i)rem; top: 25%; z-index: -@i;">
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
 }
 
 @code {
-	protected override async Task OnInitializedAsync()
-	{
-		MoneyService.OnMoneyChanged += StateHasChanged;
-		await MoneyService.GetStoredMoney();
-		StateHasChanged();
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        MoneyService.OnMoneyChanged += StateHasChanged;
+        await MoneyService.GetStoredMoney();
+        StateHasChanged();
+    }
 
-	public void Dispose()
-	{
-		MoneyService.OnMoneyChanged -= StateHasChanged;
-	}
+    public void Dispose()
+    {
+        MoneyService.OnMoneyChanged -= StateHasChanged;
+    }
 
-	private int GetMoneyTotal()
-	{
-		if (MoneyService.Coins is null)
-		{
-			return 0;
-		}
-		else
-		{
-			return MoneyService.Coins.Sum(c => (c.Value * c.Amount));
-		}
-	}
-
+    private int GetMoneyTotal()
+    {
+        if (MoneyService.Coins is null)
+        {
+            return 0;
+        }
+        else
+        {
+            return MoneyService.Coins.Sum(c => (c.Value * c.Amount));
+        }
+    }
 }
