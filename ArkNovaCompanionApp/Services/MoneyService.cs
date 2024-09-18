@@ -42,8 +42,7 @@ public class MoneyService : IMoneyService
 
 	public async Task GetStoredMoney()
 	{
-		var coins = await _storageService.GetItemAsync<List<CoinModel>>("coins");
-		Coins = coins ?? _collectionService.GetCoinsDefault();
+		Coins = await _storageService.GetItemAsync<List<CoinModel>>("coins") ?? _collectionService.GetCoinsDefault();
 	}
 
 	private async Task UpdateStoredMoney()

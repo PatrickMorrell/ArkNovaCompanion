@@ -106,6 +106,11 @@ code {
 	color: #c02d76;
 }
 
+.square-quarter {
+	height: 25vw;
+	width: 25vw;
+}
+
 .square-1 {
 	height: 4rem;
 	width: 4rem;
@@ -116,11 +121,15 @@ code {
 	width: 2rem;
 }
 
-.action-card {
+.bg-dodgerblue {
 	background-color: dodgerblue;
-	border-color: royalblue;
-	border-style: solid;
-	border-width: 1px;
+}
+
+.bg-lightgreen {
+	background-color: lightgreen;
+}
+
+.action-card {
 	border-radius: 10px;
 	padding: 20px;
 	height: 30rem;
@@ -128,10 +137,6 @@ code {
 }
 
 .action-card-upgraded {
-	background-color: lightgreen;
-	border-color: seagreen;
-	border-style: solid;
-	border-width: 1px;
 	border-radius: 10px;
 	padding: 20px;
 	height: 30rem;
@@ -139,10 +144,6 @@ code {
 }
 
 .tokens {
-	background-color: dodgerblue;
-	border-color: royalblue;
-	border-style: solid;
-	border-width: 1px;
 	border-radius: 10px;
 	padding: 20px;
 	height: 10rem;
@@ -150,10 +151,6 @@ code {
 }
 
 .workers {
-	background-color: dodgerblue;
-	border-color: royalblue;
-	border-style: solid;
-	border-width: 1px;
 	border-radius: 10px;
 	padding: 20px;
 	height: 15rem;
@@ -185,4 +182,11 @@ code {
 
 .fs-x-5 {
 	font-size: 1rem;
+}
+
+.text-outline {
+	text-shadow: -1px -1px 0 #000,
+								1px -1px 0 #000,
+								-1px 1px 0 #000,
+								1px 1px 0 #000;
 }

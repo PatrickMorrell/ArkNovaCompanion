@@ -1,94 +1,68 @@
-﻿<h3>Score Tracks</h3>
+﻿@inject IScoreService ScoreService
 
-<div>
-    <button class="btn btn-danger" @onclick="() => UpdateConservation(-1)">
-        <FontAwesome IconName="@conservationIcon"></FontAwesome>
-        <FontAwesome IconName="minus"></FontAwesome>
-    </button>
+<div class="row align-items-center my-5">
+	<div class="col">
+		<div class="row">
+			<Score ScoreType="@ScoreTypes.Conservation"></Score>
+		</div>
+		<div class="row">
+			<Score ScoreType="@ScoreTypes.Appeal"></Score>
+		</div>
+		<div class="row">
+			<Score ScoreType="@ScoreTypes.Reputation"></Score>
+		</div>
+	</div>
 
-    <button class="btn btn-primary" @onclick="() => UpdateConservation(1)">
-        <FontAwesome IconName="@conservationIcon"></FontAwesome>
-        <FontAwesome IconName="plus"></FontAwesome>
-    </button>
+	<div class="col">
+		<div class="col position-relative square-quarter rounded-4 bg-warning m-5">
+			<div class="container centre">
+				<strong class="fs-x-2 text-light text-outline" style="z-index: 10;">
+					@ScoreService.CalculateIncomeFromAppeal()
+				</strong>
+				<div class="position-absolute top-50 start-50 translate-middle opacity-50">
+					<FontAwesome IconName="coins" Size="x-1"></FontAwesome>
+				</div>
+			</div>
+		</div>
 
-    <p>Conservation: @conservation</p>
+		<div class="col position-relative square-quarter rounded-4 bg-warning m-5">
+			<div class="container centre">
+				<strong class="fs-x-2 text-light text-outline" style="z-index: 10;">
+					@CalculateTotalScore()
+				</strong>
+				<div class="position-absolute top-50 start-50 translate-middle opacity-50">
+					<FontAwesome IconName="star" Size="x-1"></FontAwesome>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div>
-    <button class="btn btn-danger" @onclick="() => UpdateAppeal(-1)">
-        <FontAwesome IconName="@appealIcon"></FontAwesome>
-        <FontAwesome IconName="minus"></FontAwesome>
-    </button>
-
-    <button class="btn btn-primary" @onclick="() => UpdateAppeal(1)">
-        <FontAwesome IconName="@appealIcon"></FontAwesome>
-        <FontAwesome IconName="plus"></FontAwesome>
-    </button>
-
-    <p>Appeal: @appeal</p>
-</div>
-<div>
-    <button class="btn btn-danger" @onclick="() => UpdateReputation(-1)">
-        <FontAwesome IconName="@reputationIcon"></FontAwesome>
-        <FontAwesome IconName="minus"></FontAwesome>
-    </button>
-
-    <button class="btn btn-primary" @onclick="() => UpdateReputation(1)">
-        <FontAwesome IconName="@reputationIcon"></FontAwesome>
-        <FontAwesome IconName="plus"></FontAwesome>
-    </button>
-
-    <p>Reputation: @reputation</p>
-</div>
-
-<p>Total score: @CalculateTotalScore()</p>
 
 @code {
-    int conservation = 0;
-    int appeal = 0;
-    int reputation = 1;
+	protected override async Task OnInitializedAsync()
+	{
+		ScoreService.OnScoreChanged += StateHasChanged;
+		await ScoreService.GetStoredScores();
+		StateHasChanged();
+	}
 
-    string conservationIcon = "shield-heart";
-    string appealIcon = "ticket";
-    string reputationIcon = "graduation-cap";
+	public void Dispose()
+	{
+		ScoreService.OnScoreChanged -= StateHasChanged;
+	}
 
-    private void UpdateConservation(int points)
-    {
-        int updatedConservation = conservation + points;
-        if (updatedConservation >= 0 && updatedConservation <= 41)
-        {
-            conservation = updatedConservation;
-        }
-    }
-
-    private void UpdateAppeal(int points)
-    {
-        int updatedAppeal = appeal + points;
-        if (updatedAppeal >= 0 && updatedAppeal <= 113)
-        {
-            appeal = updatedAppeal;
-        }
-    }
-
-    private void UpdateReputation(int points)
-    {
-        int updatedReputation = reputation + points;
-        if (updatedReputation >= 1 && updatedReputation <= 15)
-        {
-            reputation = updatedReputation;
-        }
-    }
-
-    private int CalculateTotalScore()
-    {
-        int concervationScore = 0;
-        if (conservation <= 10)
-        {
-            concervationScore = 2 * (conservation - 7);
-        }
-        else
-        {
-            concervationScore = 3 * (conservation - 8);
-        }
-        return concervationScore + appeal;
-    }
+	private int CalculateTotalScore()
+	{
+		int conservation = ScoreService.Scores.Conservation;
+		int conservationScore = 0;
+		if (conservation <= 10)
+		{
+			conservationScore = 2 * (conservation - 7);
+		}
+		else
+		{
+			conservationScore = 3 * (conservation - 8);
+		}
+		return conservationScore + ScoreService.Scores.Appeal;
+	}
 }

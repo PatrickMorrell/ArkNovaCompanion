@@ -2,7 +2,7 @@
 
 @if (WorkerService.Workers is not null)
 {
-	<div class="workers position-relative">
+	<div class="workers bg-dodgerblue position-relative">
 		<div class="container">
 			<div class="row">
 				<div class="col-6 centre">
@@ -27,4 +27,11 @@
 			</button>
 		</div>
 	</div>	
+}
+
+@code {
+	protected override async Task OnInitializedAsync()
+	{
+		await WorkerService.GetStoredWorkers();
+	}
 }
