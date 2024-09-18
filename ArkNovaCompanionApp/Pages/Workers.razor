@@ -2,7 +2,7 @@
 
 @if (WorkerService.Workers is not null)
 {
-	<div class="workers bg-dodgerblue position-relative">
+	<div class="workers bg-dodgerblue position-relative" @onclick="() => WorkerService.AddWorker()">
 		<div class="container">
 			<div class="row">
 				<div class="col-6 centre">
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 		<div class="position-absolute top-100 start-100 translate-middle">
-			<button class="btn btn-danger" @onclick="() => WorkerService.RemoveWorker()">
+			<button class="btn btn-danger" @onclick="() => WorkerService.RemoveWorker()" @onclick:stopPropagation="true">
 				<FontAwesome IconName="minus" Size="3"></FontAwesome>
 			</button>
 		</div>

@@ -106,9 +106,9 @@ code {
 	color: #c02d76;
 }
 
-.square-quarter {
-	height: 25vw;
-	width: 25vw;
+.square {
+	height: 30vw;
+	width: 30vw;
 }
 
 .square-1 {
@@ -185,8 +185,12 @@ code {
 }
 
 .text-outline {
-	text-shadow: -1px -1px 0 #000,
-								1px -1px 0 #000,
-								-1px 1px 0 #000,
-								1px 1px 0 #000;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.no-select {
+	user-select: none; /* Standard syntax */
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
 }

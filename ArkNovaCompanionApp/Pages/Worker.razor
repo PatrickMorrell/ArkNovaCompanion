@@ -3,18 +3,19 @@
 @{
 	var thisWorker = WorkerService.Workers[WorkerNumber];
 	int activeWorkers = GetActiveWorkerCount();
+	bool isActive = activeWorkers > WorkerNumber;
 }
 
-<div class="@(activeWorkers > WorkerNumber ? "text-dark" : "text-primary")" @onclick="() => AddWorker(activeWorkers)">
+<div class="@(isActive ? "text-dark" : "text-primary")" >
 	@if (thisWorker.IsUsed)
 	{
-		<div class="text-light m-2" @onclick="() => WorkerService.ToggleWorker(thisWorker)">
+		<div class="text-light m-2" @onclick="() => WorkerService.ToggleWorker(thisWorker)" @onclick:stopPropagation="@isActive">
 			<FontAwesome IconName="user" Size="x-1"></FontAwesome>
 		</div>
 	}
 	else
 	{
-		<div class="m-3" @onclick="() => WorkerService.ToggleWorker(thisWorker)">
+		<div class="m-3" @onclick="() => WorkerService.ToggleWorker(thisWorker)" @onclick:stopPropagation="@isActive">
 			<FontAwesome IconName="user" Size="x-2"></FontAwesome>
 		</div>
 	}
@@ -39,15 +40,5 @@
 	private int GetActiveWorkerCount()
 	{
 		return WorkerService.Workers.Count(w => w.IsActive);
-	}
-
-	private void AddWorker(int activeWorkers)
-	{
-		if (activeWorkers > WorkerNumber)
-		{
-			return;
-		}
-
-		WorkerService.AddWorker();
 	}
 }

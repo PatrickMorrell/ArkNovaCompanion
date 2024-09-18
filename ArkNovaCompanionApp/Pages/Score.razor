@@ -1,18 +1,16 @@
 ﻿@inject IScoreService ScoreService
 
-<div class="position-relative square-quarter rounded-3 bg-dodgerblue m-3">
-	<div @onclick="()=> UpdateScore(1)">
+<div class="position-relative square rounded-3 bg-dodgerblue m-3" @onclick="()=> UpdateScore(1)">
 		<div class="position-absolute top-50 start-50 translate-middle text-light opacity-50">
 			<FontAwesome IconName="@GetIconName()" Size="@GetIconSize()"></FontAwesome>
 		</div>
 		<div class="d-flex justify-content-center">
-			<strong class="position-relative fs-x-3 text-light text-outline">
+			<strong class="position-relative fs-x-3 text-light text-outline no-select">
 			@GetScore()
 		</strong>
 		</div>
-	</div>
 	<div class="position-absolute top-100 start-100 translate-middle">
-		<button class="btn btn-danger" @onclick="() => UpdateScore(-1)">
+		<button class="btn btn-danger" @onclick="() => UpdateScore(-1)" @onclick:stopPropagation="true">
 			<FontAwesome IconName="minus" Size="3"></FontAwesome>
 		</button>
 	</div>
