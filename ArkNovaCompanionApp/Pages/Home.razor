@@ -1,6 +1,4 @@
-﻿@inject ILocalStorageService StorageService;
-@inject NavigationManager Navigation;
-
+﻿
 @*
     New Features
         - keep track of number of cards in hand
@@ -8,7 +6,7 @@
         - add modifiers to action cards
         - record active bonuses from supporting CPs
         - create drawer for association board
-        - keep log of states 
+        - keep log of states
         ------------------------------------------------------------
         - provide undo function
         - helper for game setup
@@ -18,30 +16,38 @@
 @page "/"
 <PageTitle>Home</PageTitle>
 
-<div class="d-flex justify-content-end">
-    <button class="btn btn-danger" @onclick="() => OnStorageClear()">
-        <FontAwesome IconName="trash-can"></FontAwesome>
-    </button>
-</div>
+<Menu SelectedEvent="SetSelected"></Menu>
 
-<Actions></Actions>
-
-<Buildings></Buildings>
-
-<Money></Money>
-
-<Break></Break>
-
-<XTokens></XTokens>
-
-<ScoreTracks></ScoreTracks>
-
-<Workers></Workers>
+@switch (Selected)
+{
+    case "actions":
+        <Actions></Actions>
+        break;
+    case "buildings":
+        <Buildings></Buildings>
+        break;
+    case "money":
+        <Money></Money>
+        <div class="d-flex justify-content-center m-3">
+            <XTokens></XTokens>
+        </div>
+        break;
+    case "break":
+        <Break></Break>
+        break;
+    case "scores":
+        <ScoreTracks></ScoreTracks>
+        break;
+    case "workers":
+        <Workers></Workers>
+        break;
+}
 
 @code {
-    private async Task OnStorageClear()
+    private string Selected = "actions";
+
+    private void SetSelected(string selected)
     {
-        await StorageService.ClearAsync();
-        Navigation.NavigateTo(Navigation.Uri, true);
+        Selected = selected;
     }
 }

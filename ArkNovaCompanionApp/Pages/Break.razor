@@ -1,9 +1,10 @@
 ﻿@inject IBreakService BreakService
 @inject ITokenService TokenService
 @inject IWorkerService WorkerService
+@inject IScoreService ScoreService
 @inject IJSRuntime JSRuntime
 
-<div class="row">
+<div class="row container centre my-5">
     <button class="btn btn-primary square-1 m-2" @onclick="() => BreakService.AdvanceBreak()">
         <FontAwesome IconName="caret-left"></FontAwesome>
     </button>
@@ -37,7 +38,7 @@
             <li>Remove tokens from Action cards</li>
             <li>Return workers to players' supplies and replenish partner zoos and universities</li>
             <li>Discard folders 1 and 2 from the display and replenish from the draw pile</li>
-            <li>Collect income</li>
+            <li>Collect income (@ScoreService.CalculateIncomeFromAppeal() from appeal)</li>
             <li>Return the break token to its starting position</li>
         </ol>
     </Body>

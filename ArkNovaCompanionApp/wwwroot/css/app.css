@@ -106,9 +106,19 @@ code {
 	color: #c02d76;
 }
 
-.square {
-	height: 30vw;
-	width: 30vw;
+.square-third {
+	height: 33vw;
+	width: 33vw;
+}
+
+.square-quarter {
+	height: 25vw;
+	width: 25vw;
+}
+
+.square-fifth {
+	height: 20vw;
+	width: 20vw;
 }
 
 .square-1 {

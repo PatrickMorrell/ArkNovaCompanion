@@ -8,13 +8,13 @@
     foreach (var coin in MoneyService.Coins)
     {
         <div class="row position-relative">
-            <div class="col">
-                <div class="square rounded-3 bg-dodgerblue m-2" @onclick="() => MoneyService.AddMoney(coin)">
-                    <div class="d-flex flex-column centre text-light">
+            <div class="col-3">
+                <div class="square-fifth rounded-3 bg-dodgerblue m-2" @onclick="() => MoneyService.AddMoney(coin)">
+                    <div class="d-flex flex-column centre text-dark">
                         <div style="z-index:1;">
                             <FontAwesome IconName="hand-holding" Size="x-1"></FontAwesome>
                         </div>
-                        <div class="position-absolute square-1 rounded-4 border border-4">
+                        <div class="position-absolute square-1 rounded-4 border border-4 border-dark">
                             <strong class="container centre fs-2">@coin.Value</strong>
                         </div>
                     </div>
@@ -27,14 +27,14 @@
                     @if (i == 1)
                     {
                         <div class="position-absolute square-1 rounded-4 bg-warning border border-2 border-dark m-2"
-                             style="left: @(i)rem; top: 25%;" @onclick="() => MoneyService.RemoveMoney(coin)">
+                             style="left: @(i)rem; top: 10%;" @onclick="() => MoneyService.RemoveMoney(coin)">
                             <strong class="container centre no-select fs-2">@coin.Value</strong>
                         </div>
                     }
                     else
                     {
                         <div class="position-absolute square-1 rounded-4 bg-warning border border-2 border-dark m-2"
-                             style="left: @(i)rem; top: 25%; z-index: -@i;">
+                             style="left: @(i)rem; top: 10%; z-index: -@i;">
                         </div>
                     }
                 }
