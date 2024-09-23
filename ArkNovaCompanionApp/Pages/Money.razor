@@ -1,7 +1,6 @@
 ﻿@inject IMoneyService MoneyService
 
-<strong class="d-flex centre rounded-4 bg-warning m-2 fs-1">@GetMoneyTotal()</strong>
-
+<strong class="d-flex centre rounded-4 bg-warning m-2 fs-1">@MoneyService.GetMoneyTotal()</strong>
 
 @if (MoneyService.Coins is not null)
 {
@@ -44,27 +43,13 @@
 }
 
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         MoneyService.OnMoneyChanged += StateHasChanged;
-        await MoneyService.GetStoredMoney();
-        StateHasChanged();
     }
 
     public void Dispose()
     {
         MoneyService.OnMoneyChanged -= StateHasChanged;
-    }
-
-    private int GetMoneyTotal()
-    {
-        if (MoneyService.Coins is null)
-        {
-            return 0;
-        }
-        else
-        {
-            return MoneyService.Coins.Sum(c => (c.Value * c.Amount));
-        }
     }
 }

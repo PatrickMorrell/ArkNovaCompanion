@@ -4,9 +4,11 @@
 @inject IScoreService ScoreService
 @inject IJSRuntime JSRuntime
 
-<div class="row container centre my-5">
-    <button class="btn btn-primary square-1 m-2" @onclick="() => BreakService.AdvanceBreak()">
-        <FontAwesome IconName="caret-left"></FontAwesome>
+<div class="row centre my-5">
+    <button class="btn btn-primary square-1 rounded-4 bg-dodgerblue text-light m-2" @onclick="() => BreakService.AdvanceBreak()">
+        <div class="container centre">
+            <FontAwesome IconName="caret-left"></FontAwesome>
+        </div>
     </button>
     @for (int i = 1; i <= start; i++)
     {
@@ -25,8 +27,10 @@
             </div>
         </div>
     }
-    <button class="btn btn-primary square-1 m-2" @onclick="() => BreakService.ResetBreak(start)">
-        <FontAwesome IconName="clock-rotate-left"></FontAwesome>
+    <button class="btn btn-primary square-1 rounded-4 bg-dodgerblue text-light m-2" @onclick="() => BreakService.ResetBreak(start)">
+        <div class="container centre">
+            <FontAwesome IconName="clock-rotate-left"></FontAwesome>
+        </div>
     </button>
 </div>
 
@@ -55,15 +59,6 @@
     {
         BreakService.OnBreakChanged += StateHasChanged;
         BreakService.OnBreakTriggered += async () => await modal.Open();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await BreakService.GetStoredBreak(start);
-            StateHasChanged();
-        }
     }
 
     public void Dispose()

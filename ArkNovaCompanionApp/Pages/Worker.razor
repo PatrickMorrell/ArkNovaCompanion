@@ -25,11 +25,9 @@
 	[Parameter]
 	public int WorkerNumber { get; set; }
 
-	protected override async Task OnInitializedAsync()
+	protected override void OnInitialized()
 	{
 		WorkerService.OnWorkersChanged += StateHasChanged;
-		await WorkerService.GetStoredWorkers();
-		StateHasChanged();
 	}
 
 	public void Dispose()

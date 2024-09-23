@@ -8,7 +8,6 @@ namespace ArkNovaCompanionApp.Services
 		public ScoreService(ILocalStorageService storageService)
 		{
 			_storageService = storageService;
-			Scores = new();
 			OnScoreChanged += async () => await UpdateStoredScores();
 		}
 

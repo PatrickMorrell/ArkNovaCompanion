@@ -1,8 +1,13 @@
-﻿
+﻿@inject IBuildingService BuildingService
+@inject IBreakService BreakService
+@inject IMoneyService MoneyService
+@inject IScoreService ScoreService
+@inject IWorkerService WorkerService
+@inject ITokenService TokenService
+
 @*
     New Features
         - keep track of number of cards in hand
-        - automate income from appeal
         - add modifiers to action cards
         - record active bonuses from supporting CPs
         - create drawer for association board
@@ -16,19 +21,16 @@
 @page "/"
 <PageTitle>Home</PageTitle>
 
-<Menu SelectedEvent="SetSelected"></Menu>
+<Menu MenuItemSelected="SetSelected" Selected=@Selected></Menu>
 
 @switch (Selected)
 {
     case "actions":
         <Actions></Actions>
         break;
-    case "buildings":
-        <Buildings></Buildings>
-        break;
     case "money":
         <Money></Money>
-        <div class="d-flex justify-content-center m-3">
+        <div class="d-flex justify-content-center m-1">
             <XTokens></XTokens>
         </div>
         break;
@@ -39,12 +41,28 @@
         <ScoreTracks></ScoreTracks>
         break;
     case "workers":
-        <Workers></Workers>
+        <div class="d-flex justify-content-center m-3">
+            <Workers></Workers>
+        </div>
+        <div class="m-5">
+            <Buildings></Buildings>
+        </div>
         break;
 }
 
 @code {
+    private int start = 10;
     private string Selected = "actions";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await BuildingService.GetStoredBuildings();
+        await BreakService.GetStoredBreak(start);
+        await MoneyService.GetStoredMoney();
+        await ScoreService.GetStoredScores();
+        await WorkerService.GetStoredWorkers();
+        await TokenService.GetStoredTokens();
+    }
 
     private void SetSelected(string selected)
     {

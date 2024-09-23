@@ -43,11 +43,9 @@
 </div>
 
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         TokenService.OnTokensChanged += StateHasChanged;
-        await TokenService.GetStoredTokens();
-        StateHasChanged();
     }
 
     public void Dispose()

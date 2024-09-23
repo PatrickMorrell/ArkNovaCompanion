@@ -28,10 +28,3 @@
 		</div>
 	</div>	
 }
-
-@code {
-	protected override async Task OnInitializedAsync()
-	{
-		await WorkerService.GetStoredWorkers();
-	}
-}

@@ -21,11 +21,9 @@
 	[Parameter]
 	public string? ScoreType { get; set; }
 
-	protected override async Task OnInitializedAsync()
+	protected override void OnInitialized()
 	{
 		ScoreService.OnScoreChanged += StateHasChanged;
-		await ScoreService.GetStoredScores();
-		StateHasChanged();
 	}
 
 	public void Dispose()

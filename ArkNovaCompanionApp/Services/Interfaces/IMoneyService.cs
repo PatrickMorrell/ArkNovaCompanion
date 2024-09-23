@@ -13,5 +13,7 @@ public interface IMoneyService
 
     void RemoveMoney(CoinModel coin);
 
+    int GetMoneyTotal();
+
     Task GetStoredMoney();
 }

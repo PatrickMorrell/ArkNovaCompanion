@@ -11,7 +11,6 @@ public class WorkerService : IWorkerService
     {
         _storageService = storageService;
         _collectionService = collectionService;
-        Workers = _collectionService.GetWorkersDefault();
 		OnWorkersChanged += async () => await UpdateStoredWorkers();
     }
 

@@ -11,7 +11,6 @@ public class MoneyService : IMoneyService
 	{
 		_storageService = storageService;
 		_collectionService = collectionService;
-		Coins = _collectionService.GetCoinsDefault();
 		OnMoneyChanged += async () => await UpdateStoredMoney();
 	}
 
@@ -38,11 +37,29 @@ public class MoneyService : IMoneyService
 			Coins.First(c => c.Value == coin.Value).Amount--;
 			OnMoneyChanged?.Invoke();
 		}
-	}
+    }
 
-	public async Task GetStoredMoney()
+    public int GetMoneyTotal()
+    {
+        if (Coins is null)
+        {
+            return 0;
+        }
+        else
+        {
+            return Coins.Sum(c => c.Value * c.Amount);
+        }
+    }
+
+    public async Task GetStoredMoney()
 	{
-		Coins = await _storageService.GetItemAsync<List<CoinModel>>("coins") ?? _collectionService.GetCoinsDefault();
+		var coins = await _storageService.GetItemAsync<List<CoinModel>>("coins");
+		if (coins is null)
+		{
+			coins = _collectionService.GetCoinsDefault();
+		}
+
+		Coins = coins;
 	}
 
 	private async Task UpdateStoredMoney()
