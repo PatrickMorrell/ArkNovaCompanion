@@ -1,6 +1,6 @@
 ﻿@inject ITokenService TokenService
 
-<div class="tokens bg-dodgerblue position-relative" @onclick="() => TokenService.AddToken()">
+<div class="position-relative bg-dodgerblue rounded-3 p-3" @onclick="() => TokenService.AddToken()">
     <div class="d-flex justify-content-center">
         @for (int i = 0; i < 2; i++)
         {

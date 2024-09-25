@@ -12,7 +12,9 @@ namespace ArkNovaCompanionApp.Services.Interfaces
 
 		void SaveBuildings(List<BuildingTypeModel> selectedBuildings);
 
-		void ToggleOccupied(BuildingModel building);
+		void RemoveBuilding(string buildingName);
+
+        void ToggleOccupied(BuildingModel building);
 
 		Task GetStoredBuildings();
     }

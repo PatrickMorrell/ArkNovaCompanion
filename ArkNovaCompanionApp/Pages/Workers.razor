@@ -2,29 +2,15 @@
 
 @if (WorkerService.Workers is not null)
 {
-	<div class="workers bg-dodgerblue position-relative" @onclick="() => WorkerService.AddWorker()">
-		<div class="container">
-			<div class="row">
-				<div class="col-6 centre">
-					<Worker WorkerNumber=0></Worker>
-				</div>
-				<div class="col-6 centre">
-					<Worker WorkerNumber=1></Worker>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-6 centre">
-					<Worker WorkerNumber=2></Worker>
-				</div>
-				<div class="col-6 centre">
-					<Worker WorkerNumber=3></Worker>
-				</div>
-			</div>
-		</div>
-		<div class="position-absolute top-100 start-100 translate-middle">
-			<button class="btn btn-danger" @onclick="() => WorkerService.RemoveWorker()" @onclick:stopPropagation="true">
-				<FontAwesome IconName="minus" Size="3"></FontAwesome>
-			</button>
-		</div>
-	</div>	
+    <div class="d-flex bg-dodgerblue rounded-3 position-relative" @onclick="() => WorkerService.AddWorker()">
+        @foreach (WorkerModel worker in WorkerService.Workers)
+        {
+            <Worker Model=worker></Worker>
+        }
+        <div class="position-absolute top-100 start-100 translate-middle">
+            <button class="btn btn-danger" @onclick="() => WorkerService.RemoveWorker()" @onclick:stopPropagation="true">
+                <FontAwesome IconName="minus" Size="3"></FontAwesome>
+            </button>
+        </div>
+    </div>
 }

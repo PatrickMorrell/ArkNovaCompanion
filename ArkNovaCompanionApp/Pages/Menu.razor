@@ -4,7 +4,7 @@
 <div class="d-flex centre mx-2">
     <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "actions" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("actions")'>
         <div class="centre">
-            <FontAwesome IconName="house" Size="3"></FontAwesome>
+            <FontAwesome IconName="calendar-day" Size="3"></FontAwesome>
         </div>
     </button>
     <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "break" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("break")'>
@@ -17,9 +17,9 @@
             <FontAwesome IconName="coins" Size="3"></FontAwesome>
         </div>
     </button>
-    <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "workers" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("workers")'>
+    <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "park" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("park")'>
         <div class="centre">
-            <FontAwesome IconName="users" Size="3"></FontAwesome>
+            <FontAwesome IconName="map" Size="3"></FontAwesome>
         </div>
     </button>
     <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "scores" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("scores")'>

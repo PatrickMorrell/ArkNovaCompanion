@@ -7,11 +7,13 @@
 
 @*
     New Features
+        - confirm popup on clear storage
         - keep track of number of cards in hand
         - add modifiers to action cards
         - record active bonuses from supporting CPs
         - create drawer for association board
         - keep log of states
+        - mark menu items when UI updates
         ------------------------------------------------------------
         - provide undo function
         - helper for game setup
@@ -40,11 +42,11 @@
     case "scores":
         <ScoreTracks></ScoreTracks>
         break;
-    case "workers":
-        <div class="d-flex justify-content-center m-3">
+    case "park":
+        <div class="d-flex justify-content-center my-3">
             <Workers></Workers>
         </div>
-        <div class="m-5">
+        <div class="my-3">
             <Buildings></Buildings>
         </div>
         break;

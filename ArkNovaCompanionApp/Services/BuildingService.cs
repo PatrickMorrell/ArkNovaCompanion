@@ -37,7 +37,17 @@ namespace ArkNovaCompanionApp.Services
 			OnBuildingsChanged?.Invoke();
 		}
 
-		public void ToggleOccupied(BuildingModel building)
+        public void RemoveBuilding(string buildingName)
+        {
+			BuildingModel building = Buildings.Find(b => b.Name == buildingName);
+            if (building != null)
+			{
+				Buildings.Remove(building);
+				OnBuildingsChanged?.Invoke();
+			}
+        }
+
+        public void ToggleOccupied(BuildingModel building)
 		{
 			if (!building.IsStandard)
 			{
