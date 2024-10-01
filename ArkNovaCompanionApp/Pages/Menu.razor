@@ -27,14 +27,27 @@
             <FontAwesome IconName="shield-heart" Size="3"></FontAwesome>
         </div>
     </button>
-    <button class="btn btn-danger square-2 rounded-2 mx-1" @onclick="() => OnStorageClear()">
+    <button class="btn btn-danger square-2 rounded-2 mx-1" @onclick="async () => await modal.Open()">
         <div class="centre">
             <FontAwesome IconName="trash-can" Size="3"></FontAwesome>
         </div>
     </button>
 </div>
 
+<Modal Id="clearStorageModal" @ref="modal">
+    <Title>Reset?</Title>
+    <Body>
+        This action will clear everything
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="() => OnStorageClear()">Yes</button>
+    </Footer>
+</Modal>
+
 @code {
+    private Modal modal { get; set; }
+
     [Parameter]
     public EventCallback<string> MenuItemSelected { get; set; }
 
