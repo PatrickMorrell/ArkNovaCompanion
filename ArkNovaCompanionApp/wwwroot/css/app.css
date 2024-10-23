@@ -137,6 +137,10 @@ code {
 	background-color: lightgreen;
 }
 
+.bg-darkseagreen {
+	background-color: darkseagreen
+}
+
 .action-card {
 	border-radius: 10px;
 	padding: 20px;

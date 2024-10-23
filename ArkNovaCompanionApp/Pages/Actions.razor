@@ -3,6 +3,7 @@
 @inject IMoneyService MoneyService
 @inject IBuildingService BuildingService
 @inject ITokenService TokenService
+@inject IMenuService MenuService
 
 @if (ActionService.Actions.Any())
 {
@@ -60,7 +61,7 @@
 				<div class="position-absolute row translate-middle top-50 start-0 mt-5">
 					<button class="btn btn-info @(SelectedAction.Strength < 2 ? "opacity-50" : "")" @onclick="() => ActionService.MoveAction(SelectedAction)">
 						<FontAwesome IconName="angles-left" Size="3"></FontAwesome>
-					</button> 
+					</button>
 				</div>
 				<div class="position-absolute row translate-middle top-50 start-100 mb-5 mx-2">
 					<button class="btn btn-info @(SelectedAction.Strength > 4 ? "opacity-50" : "")" @onclick="() => ShiftAction(SelectedAction, 1)">
@@ -99,8 +100,6 @@
 	protected override async Task OnInitializedAsync()
 	{
 		ActionService.OnActionsChanged += StateHasChanged;
-		await ActionService.GetStoredActions();
-		StateHasChanged();
 	}
 
 	public void Dispose()
@@ -122,10 +121,13 @@
 		{
 			BreakService.AdvanceBreak(action.Strength);
 			MoneyService.AddCoins(action.Strength);
+			MenuService.ToggleAlert(MenuItems.Break);
+			MenuService.ToggleAlert(MenuItems.Money);
 		}
-		else
+		else if (action.Name == ActionNames.Cards)
 		{
-			BreakService.AdvanceBreak(action.Name == ActionNames.Cards ? 2 : 0);
+			BreakService.AdvanceBreak(2);
+			MenuService.ToggleAlert(MenuItems.Break);
 		}
 
 		if (action.Name == ActionNames.Build)

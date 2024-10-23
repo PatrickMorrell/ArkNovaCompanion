@@ -1,9 +1,11 @@
-﻿@inject IBuildingService BuildingService
+﻿@inject IActionService ActionService
+@inject IBuildingService BuildingService
 @inject IBreakService BreakService
 @inject IMoneyService MoneyService
 @inject IScoreService ScoreService
 @inject IWorkerService WorkerService
 @inject ITokenService TokenService
+@inject IMenuService MenuService
 
 @*
     New Features
@@ -23,51 +25,64 @@
 @page "/"
 <PageTitle>Home</PageTitle>
 
-<Menu MenuItemSelected="SetSelected" Selected=@Selected></Menu>
+<Menu></Menu>
 
-@switch (Selected)
+@foreach (MenuItemModel item in MenuService.Menu ?? new List<MenuItemModel>())
 {
-    case "actions":
-        <Actions></Actions>
-        break;
-    case "money":
-        <Money></Money>
-        <div class="d-flex justify-content-center m-1">
-            <XTokens></XTokens>
-        </div>
-        break;
-    case "break":
-        <Break></Break>
-        break;
-    case "scores":
-        <ScoreTracks></ScoreTracks>
-        break;
-    case "park":
-        <div class="d-flex justify-content-center my-3">
-            <Workers></Workers>
-        </div>
-        <div class="my-3">
-            <Buildings></Buildings>
-        </div>
-        break;
+    if (item.IsSelected)
+    {
+        @switch (item.ItemName)
+        {
+            case MenuItems.Actions:
+                <Actions></Actions>
+                break;
+            case MenuItems.Money:
+                <Money></Money>
+                <div class="d-flex justify-content-center m-1">
+                    <XTokens></XTokens>
+                </div>
+                break;
+            case MenuItems.Break:
+                <Break></Break>
+                break;
+            case MenuItems.Scores:
+                <ScoreTracks></ScoreTracks>
+                break;
+            case MenuItems.Park:
+                <div class="d-flex justify-content-center my-3">
+                    <Workers></Workers>
+                </div>
+                <div class="my-3">
+                    <Buildings></Buildings>
+                </div>
+                break;
+        }
+    }
 }
+
 
 @code {
     private int start = 10;
-    private string Selected = "actions";
 
     protected override async Task OnInitializedAsync()
     {
+        await ActionService.GetStoredActions();
         await BuildingService.GetStoredBuildings();
         await BreakService.GetStoredBreak(start);
         await MoneyService.GetStoredMoney();
         await ScoreService.GetStoredScores();
         await WorkerService.GetStoredWorkers();
         await TokenService.GetStoredTokens();
+        await MenuService.GetStoredMenu();
     }
 
-    private void SetSelected(string selected)
+    protected override void OnInitialized()
     {
-        Selected = selected;
+        MenuService.OnMenuChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MenuService.OnMenuChanged -= StateHasChanged;
     }
 }

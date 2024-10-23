@@ -60,7 +60,8 @@ public class MoneyService : IMoneyService
 		}
 
 		Coins = coins;
-	}
+        OnMoneyChanged?.Invoke();
+    }
 
 	private async Task UpdateStoredMoney()
 	{

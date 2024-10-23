@@ -62,7 +62,8 @@ public class WorkerService : IWorkerService
     public async Task GetStoredWorkers()
     {
         Workers = await _storageService.GetItemAsync<List<WorkerModel>>("workers") ?? _collectionService.GetWorkersDefault();
-	}
+        OnWorkersChanged?.Invoke();
+    }
 
     private async Task UpdateStoredWorkers()
     {

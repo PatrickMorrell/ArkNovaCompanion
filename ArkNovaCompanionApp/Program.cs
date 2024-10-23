@@ -20,5 +20,6 @@ builder.Services.AddScoped<IActionService, ActionService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IWorkerService, WorkerService>();
 builder.Services.AddScoped<IScoreService, ScoreService>();
+builder.Services.AddScoped<IMenuService, MenuService>();
 
 await builder.Build().RunAsync();

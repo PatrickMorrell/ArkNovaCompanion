@@ -1,62 +1,49 @@
-﻿@inject ILocalStorageService StorageService
+﻿@inject IMenuService MenuService
+@inject ILocalStorageService StorageService
 @inject NavigationManager Navigation
 
-<div class="d-flex centre mx-2">
-    <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "actions" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("actions")'>
-        <div class="centre">
-            <FontAwesome IconName="calendar-day" Size="3"></FontAwesome>
-        </div>
-    </button>
-    <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "break" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("break")'>
-        <div class="centre">
-            <FontAwesome IconName="mug-hot" Size="3"></FontAwesome>
-        </div>
-    </button>
-    <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "money" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("money")'>
-        <div class="centre">
-            <FontAwesome IconName="coins" Size="3"></FontAwesome>
-        </div>
-    </button>
-    <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "park" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("park")'>
-        <div class="centre">
-            <FontAwesome IconName="map" Size="3"></FontAwesome>
-        </div>
-    </button>
-    <button class="btn btn-primary square-2 rounded-2 border-0 @(Selected == "scores" ? "" : "text-dark") bg-dodgerblue mx-1" @onclick='() => MenuItemSelected.InvokeAsync("scores")'>
-        <div class="centre">
-            <FontAwesome IconName="shield-heart" Size="3"></FontAwesome>
-        </div>
-    </button>
-    <button class="btn btn-danger square-2 rounded-2 mx-1" @onclick="async () => await modal.Open()">
-        <div class="centre">
-            <FontAwesome IconName="trash-can" Size="3"></FontAwesome>
-        </div>
-    </button>
+<div class="d-flex centre m-2">
+	@if (MenuService.Menu is not null)
+	{
+		@foreach (MenuItemModel item in MenuService.Menu)
+		{
+			<MenuItem Model=item></MenuItem>
+		}
+	}
+	<button class="btn btn-danger square-2 rounded-2 mx-1" @onclick="async () => await modal.Open()">
+		<div class="centre">
+			<FontAwesome IconName="trash-can" Size="3"></FontAwesome>
+		</div>
+	</button>
 </div>
 
 <Modal Id="clearStorageModal" @ref="modal">
-    <Title>Reset?</Title>
-    <Body>
-        This action will clear everything
-    </Body>
-    <Footer>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="() => OnStorageClear()">Yes</button>
-    </Footer>
+	<Title>Reset?</Title>
+	<Body>
+		This action will clear everything
+	</Body>
+	<Footer>
+		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+		<button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="() => OnStorageClear()">Yes</button>
+	</Footer>
 </Modal>
 
 @code {
-    private Modal modal { get; set; }
+	private Modal modal { get; set; }
 
-    [Parameter]
-    public EventCallback<string> MenuItemSelected { get; set; }
+	protected override void OnInitialized()
+	{
+		MenuService.OnMenuChanged += StateHasChanged;
+	}
 
-    [Parameter]
-    public string Selected { get; set; }
+	public void Dispose()
+	{
+		MenuService.OnMenuChanged -= StateHasChanged;
+	}
 
-    private async Task OnStorageClear()
-    {
-        await StorageService.ClearAsync();
-        Navigation.NavigateTo(Navigation.Uri, true);
-    }
+	private async Task OnStorageClear()
+	{
+		await StorageService.ClearAsync();
+		Navigation.NavigateTo(Navigation.Uri, true);
+	}
 }

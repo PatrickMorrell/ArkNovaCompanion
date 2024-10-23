@@ -2,6 +2,7 @@
 @inject ICollectionService CollectionService
 @inject IActionService ActionService
 @inject IMoneyService MoneyService
+@inject IMenuService MenuService
 
 @{
     SizeRemaining = MaxSize - GetSelectedTotal();
@@ -138,6 +139,8 @@
         BuildingService.SaveBuildings(buildings.Where(b => b.IsSelected).ToList());
         buildings.ForEach(b => b.IsSelected = false);
         ActionService.MoveAction(ActionNames.Build);
+
+        MenuService.ToggleAlert(MenuItems.Park);
     }
 
     private void OnCancelClick()

@@ -11,4 +11,6 @@ public interface ICollectionService
 	List<BuildingTypeModel> GetBuildingTypes();
 
 	List<WorkerModel> GetWorkersDefault();
+
+	List<MenuItemModel> GetMenuDefault();
 }

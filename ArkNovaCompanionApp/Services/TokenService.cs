@@ -44,6 +44,7 @@ public class TokenService : ITokenService
     public async Task GetStoredTokens()
     {
 		TokenAmount = await _storageService.GetItemAsync<int>("tokens");
+        OnTokensChanged?.Invoke();
     }
 
     private async Task UpdateStoredTokens()

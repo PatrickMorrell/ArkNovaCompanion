@@ -61,7 +61,8 @@ namespace ArkNovaCompanionApp.Services
 		public async Task GetStoredBuildings()
 		{
 			Buildings = await _storageService.GetItemAsync<List<BuildingModel>>("buildings") ?? [];
-		}
+            OnBuildingsChanged?.Invoke();
+        }
 
 		private async Task UpdateStoredBuildings()
 		{

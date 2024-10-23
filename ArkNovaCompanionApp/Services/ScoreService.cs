@@ -75,7 +75,8 @@ namespace ArkNovaCompanionApp.Services
 		public async Task GetStoredScores()
 		{
 			Scores = await _storageService.GetItemAsync<ScoresModel>("scores") ?? new();
-		}
+            OnScoreChanged.Invoke();
+        }
 
 		private async Task UpdateStoredScores()
 		{

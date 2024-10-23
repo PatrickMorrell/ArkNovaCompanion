@@ -2,6 +2,7 @@
 @inject ITokenService TokenService
 @inject IWorkerService WorkerService
 @inject IScoreService ScoreService
+@inject IMenuService MenuService
 @inject IJSRuntime JSRuntime
 
 <div class="row centre my-5">
@@ -72,5 +73,8 @@
         TokenService.AddToken();
         WorkerService.ReturnWorkers();
         BreakService.ResetBreak(start);
+
+        MenuService.ToggleAlert(MenuItems.Money);
+        MenuService.ToggleAlert(MenuItems.Park);
     }
 }

@@ -165,4 +165,37 @@ public class CollectionService : ICollectionService
 
 		return workers;
 	}
+
+	public List<MenuItemModel> GetMenuDefault()
+	{
+		return [
+			new() 
+			{
+				ItemName = MenuItems.Actions,
+				ItemIcon = "calendar-day",
+				IsSelected = true,
+			},
+			new()
+			{
+				ItemName = MenuItems.Money,
+				ItemIcon = "coins",
+				ShowAlert = true,
+			},
+			new()
+			{
+				ItemName = MenuItems.Break,
+				ItemIcon = "mug-hot",
+			},
+			new()
+			{
+				ItemName = MenuItems.Scores,
+				ItemIcon = "shield-heart",
+			},
+			new()
+			{
+				ItemName = MenuItems.Park,
+				ItemIcon = "map",
+			},
+		];
+	}
 }
