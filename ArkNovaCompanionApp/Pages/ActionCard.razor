@@ -43,13 +43,13 @@
         string description = action.IsUpgraded ? action.UpgradedDescription : action.Description;
         description = description.Replace("[STRENGTH]", action.Strength.ToString());
 
-        if (action.Name == "Animals")
+        if (action.Name == ActionNames.Animals)
         {
             string animals = CalculateAnimals(action.Strength, action.IsUpgraded, out bool givesRep);
             description = description.Replace("[ANIMALS]", animals)
                 .Replace("[REPUTATION]", givesRep ? "<div>Gain 1 reputation <i class=\"fa-solid fa-graduation-cap fs-3 px-1\"></i></div>" : "");
         }
-        else if (action.Name == "Cards")
+        else if (action.Name == ActionNames.Cards)
         {
             string cards = CalculateCards(action.Strength, action.IsUpgraded, out bool discard, out bool allowSnap);
             description = description.Replace("[CARDS]", cards)

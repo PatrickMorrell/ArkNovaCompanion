@@ -179,7 +179,6 @@ public class CollectionService : ICollectionService
 			{
 				ItemName = MenuItems.Money,
 				ItemIcon = "coins",
-				ShowAlert = true,
 			},
 			new()
 			{
