@@ -5,13 +5,13 @@
 @inject IMenuService MenuService
 @inject IJSRuntime JSRuntime
 
-<div class="row centre my-5">
+<div class="row centre px-5 my-2">
     <button class="btn btn-primary square-1 rounded-4 bg-dodgerblue text-light m-2" @onclick="() => BreakService.AdvanceBreak()">
         <div class="container centre">
             <FontAwesome IconName="caret-left"></FontAwesome>
         </div>
     </button>
-    @for (int i = 1; i <= start; i++)
+    @for (int i = 1; i <= BreakService.StartingBreak; i++)
     {
         <div class="square-1 rounded-3 @(i % 2 == 0 ? "text-bg-dark" : "text-bg-secondary") m-2">
             <div class="container centre">
@@ -28,7 +28,7 @@
             </div>
         </div>
     }
-    <button class="btn btn-primary square-1 rounded-4 bg-dodgerblue text-light m-2" @onclick="() => BreakService.ResetBreak(start)">
+    <button class="btn btn-primary square-1 rounded-4 bg-dodgerblue text-light m-2" @onclick="() => BreakService.ResetBreak(BreakService.StartingBreak)">
         <div class="container centre">
             <FontAwesome IconName="clock-rotate-left"></FontAwesome>
         </div>
@@ -54,7 +54,6 @@
 
 @code {
     private Modal modal { get; set; }
-    private int start = 10;
 
     protected override void OnInitialized()
     {
@@ -72,7 +71,7 @@
     {
         TokenService.AddToken();
         WorkerService.ReturnWorkers();
-        BreakService.ResetBreak(start);
+        BreakService.ResetBreak(BreakService.StartingBreak);
 
         MenuService.ToggleAlert(MenuItems.Money);
         MenuService.ToggleAlert(MenuItems.Park);

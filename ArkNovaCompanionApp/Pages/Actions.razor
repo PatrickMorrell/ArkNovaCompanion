@@ -4,14 +4,13 @@
 @inject IBuildingService BuildingService
 @inject ITokenService TokenService
 @inject IMenuService MenuService
-@inject IWorkerService WorkerService
 
 @if (ActionService.Actions.Any())
 {
     <div class="d-flex justify-content-between overflow-x-auto">
         @foreach (ActionModel action in ActionService.Actions)
         {
-            <div class="position-relative mb-5">
+            <div class="position-relative mb-5 me-2">
                 <div class="d-flex flex-column align-items-center">
                     <div class="square-1 rounded-4 text-bg-dark m-2">
                         <div class="container centre fs-2">@(action.Strength)</div>
@@ -21,7 +20,7 @@
                     </div>
                 </div>
                 <div class="position-absolute top-100 start-100 translate-middle pe-5">
-                    <button class="square-2 @(action.IsUpgraded ? "bg-lightgreen" : "bg-dodgerblue") rounded-5 border-0" @onclick="() => ActionService.UpgradeAction(action)">
+                    <button class="square-1 @(action.IsUpgraded ? "bg-lightgreen" : "bg-dodgerblue") rounded-5 border-0" @onclick="() => ActionService.UpgradeAction(action)">
                         <FontAwesome IconName="rotate" Size="3"></FontAwesome>
                     </button>
                 </div>

@@ -8,9 +8,13 @@ public interface IBreakService
 
     int BreakAmount { get; set; }
 
+    int StartingBreak { get; set; }
+
     void AdvanceBreak(int amount = 1);
 
     void ResetBreak(int amount);
+
+    void RecalculateStartingBreak(int playerCount);
 
     Task GetStoredBreak(int amount);
 }

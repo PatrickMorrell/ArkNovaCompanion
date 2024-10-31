@@ -6,6 +6,7 @@
 @inject IWorkerService WorkerService
 @inject ITokenService TokenService
 @inject IMenuService MenuService
+@inject IPlayerService PlayerService
 
 @*
     New Features
@@ -14,7 +15,6 @@
         - record active bonuses from supporting CPs
         - create drawer for association board
         - keep log of states
-        - control for player count
         ------------------------------------------------------------
         - provide undo function
         - helper for game setup
@@ -43,6 +43,7 @@
                 break;
             case MenuItems.Break:
                 <Break></Break>
+                <Players></Players>
                 break;
             case MenuItems.Scores:
                 <ScoreTracks></ScoreTracks>
@@ -61,13 +62,12 @@
 
 
 @code {
-    private int start = 10;
-
     protected override async Task OnInitializedAsync()
     {
         await ActionService.GetStoredActions();
         await BuildingService.GetStoredBuildings();
-        await BreakService.GetStoredBreak(start);
+        await PlayerService.GetStoredPlayers();
+        await BreakService.GetStoredBreak(BreakService.StartingBreak);
         await MoneyService.GetStoredMoney();
         await ScoreService.GetStoredScores();
         await WorkerService.GetStoredWorkers();
