@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
@@ -19,10 +19,10 @@ jobs:
           dotnet-version: 8.0.403
 
       - name: Publish .NET Core Project
-        run: dotnet publish ArkNovaCompanion.csproj -c Release -o release --nologo
+        run: dotnet publish ArkNovaCompanionApp.csproj -c Release -o release --nologo
 
       - name: Set subdirectory
-        run: echo "SUBDIRECTORY='ArkNovaCompanion'" >> $GITHUB_ENV
+        run: echo "SUBDIRECTORY='ArkNovaCompanionApp'" >> $GITHUB_ENV
 
       - name: Update base href
         run: sed -i "s|<base href=\"/\">|<base href=\"/$SUBDIRECTORY/\">|" index.html
