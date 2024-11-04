@@ -1,0 +1,79 @@
+﻿@inject IBreakService BreakService
+@inject ITokenService TokenService
+@inject IWorkerService WorkerService
+@inject IScoreService ScoreService
+@inject IMenuService MenuService
+@inject IJSRuntime JSRuntime
+
+<div class="row centre px-5 my-2">
+    <button class="btn btn-primary square-1 rounded-4 bg-dodgerblue text-light m-2" @onclick="() => BreakService.AdvanceBreak()">
+        <div class="container centre">
+            <FontAwesome IconName="caret-left"></FontAwesome>
+        </div>
+    </button>
+    @for (int i = 1; i <= BreakService.StartingBreak; i++)
+    {
+        <div class="square-1 rounded-3 @(i % 2 == 0 ? "text-bg-dark" : "text-bg-secondary") m-2">
+            <div class="container centre">
+                @if (BreakService.BreakAmount == i)
+                {
+                    <div @onclick="() => BreakService.AdvanceBreak()">
+                        <FontAwesome IconName="mug-hot"></FontAwesome>
+                    </div>
+                }
+                else
+                {
+                    <strong class="fs-2">@(i)</strong>
+                }
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary square-1 rounded-4 bg-dodgerblue text-light m-2" @onclick="() => BreakService.ResetBreak(BreakService.StartingBreak)">
+        <div class="container centre">
+            <FontAwesome IconName="clock-rotate-left"></FontAwesome>
+        </div>
+    </button>
+</div>
+
+<Modal Id="breakModal" @ref="modal">
+    <Title>Break Triggered!</Title>
+    <Body>
+        <ol>
+            <li>Discard down to hand limits (3 or 5)</li>
+            <li>Remove tokens from Action cards</li>
+            <li>Return workers to players' supplies and replenish partner zoos and universities</li>
+            <li>Discard folders 1 and 2 from the display and replenish from the draw pile</li>
+            <li>Collect income (@ScoreService.CalculateIncomeFromAppeal() from appeal)</li>
+            <li>Return the break token to its starting position</li>
+        </ol>
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="() => OnBreakTriggered()">Ok</button>
+    </Footer>
+</Modal>
+
+@code {
+    private Modal modal { get; set; }
+
+    protected override void OnInitialized()
+    {
+        BreakService.OnBreakChanged += StateHasChanged;
+        BreakService.OnBreakTriggered += async () => await modal.Open();
+    }
+
+    public void Dispose()
+    {
+        BreakService.OnBreakChanged -= StateHasChanged;
+        BreakService.OnBreakTriggered -= async () => await modal.Open();
+    }
+
+    private void OnBreakTriggered()
+    {
+        TokenService.AddToken();
+        WorkerService.ReturnWorkers();
+        BreakService.ResetBreak(BreakService.StartingBreak);
+
+        MenuService.ToggleAlert(MenuItems.Money);
+        MenuService.ToggleAlert(MenuItems.Park);
+    }
+}

@@ -1,0 +1,34 @@
+﻿<h3>Conservation Bonuses</h3>
+
+@foreach (var bonus in bonuses)
+{
+    <div class="d-flex">
+        <button class="btn @(bonus.IsActivated ? "btn-primary" : "btn-danger")" @onclick="() => ToggleActive(bonus)">@bonus.Name</button>
+    </div>
+}
+
+@code {
+
+    private class Bonus
+    {
+        public string? Name { get; set; }
+        public bool OnIncome { get; set; }
+        public bool IsActivated { get; set; } = false;
+    }
+
+    List<Bonus> bonuses = new List<Bonus>()
+    {
+        new Bonus { Name = "Snap card", OnIncome = true },
+        new Bonus { Name = "Size 2 Enclosure", OnIncome = true },
+        new Bonus { Name = "5 Money", OnIncome = true },
+        new Bonus { Name = "1 CP", OnIncome = true },
+        new Bonus { Name = "2 Reputation", OnIncome = false },
+        new Bonus { Name = "12 Money", OnIncome = false },
+        new Bonus { Name = "3 X Tokens", OnIncome = false }
+    };
+
+    private void ToggleActive(Bonus bonus)
+    {
+        bonus.IsActivated = !bonus.IsActivated;
+    }
+}

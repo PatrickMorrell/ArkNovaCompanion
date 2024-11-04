@@ -1,0 +1,95 @@
+﻿@inject IBuildingService BuildingService
+
+@{
+    var buildings = BuildingService.Buildings;
+    bool hasPettingZoo = buildings?.Exists(b => b.Name == BuildingTypes.PettingZoo) ?? false;
+    bool hasReptileHouse = buildings?.Exists(b => b.Name == BuildingTypes.ReptileHouse) ?? false;
+    bool hasLargeBirdAviary = buildings?.Exists(b => b.Name == BuildingTypes.LargeBirdAviary) ?? false;
+}
+
+<div class="d-flex centre">
+    <div class="position-relative square-fifth rounded-3 bg-dodgerblue m-3" @onclick="()=> AddBuilding(BuildingTypes.Kiosk)">
+        <div class="position-absolute top-50 start-50 translate-middle text-light opacity-50">
+            <FontAwesome IconName="store" Size="x-3"></FontAwesome>
+        </div>
+        <div class="d-flex justify-content-center">
+            <strong class="position-relative fs-x-3 text-light text-outline no-select">
+                @buildings?.Where(b => b.Name == BuildingTypes.Kiosk)?.Count()
+            </strong>
+        </div>
+        <div class="position-absolute top-100 start-100 translate-middle">
+            <button class="btn btn-danger" @onclick="() => BuildingService.RemoveBuilding(BuildingTypes.Kiosk)" @onclick:stopPropagation="true">
+                <FontAwesome IconName="minus" Size="3"></FontAwesome>
+            </button>
+        </div>
+    </div>
+    <div class="position-relative square-fifth rounded-3 bg-dodgerblue m-3" @onclick="()=> AddBuilding(BuildingTypes.Pavilion)">
+        <div class="position-absolute top-50 start-50 translate-middle text-light opacity-50">
+            <FontAwesome IconName="landmark-dome" Size="x-3"></FontAwesome>
+        </div>
+        <div class="d-flex justify-content-center">
+            <strong class="position-relative fs-x-3 text-light text-outline no-select">
+                @buildings?.Where(b => b.Name == BuildingTypes.Pavilion)?.Count()
+            </strong>
+        </div>
+        <div class="position-absolute top-100 start-100 translate-middle">
+            <button class="btn btn-danger" @onclick="() => BuildingService.RemoveBuilding(BuildingTypes.Pavilion)" @onclick:stopPropagation="true">
+                <FontAwesome IconName="minus" Size="3"></FontAwesome>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex centre">
+    <div class="square-fifth rounded-3 bg-dodgerblue @(hasPettingZoo ? "text-dark" : "text-primary") m-3">
+        <div class="container centre">
+            <FontAwesome IconName="cow" Size="x-3"></FontAwesome>
+        </div>
+    </div>
+    <div class="square-fifth rounded-3 bg-dodgerblue @(hasReptileHouse ? "text-dark" : "text-primary") m-3">
+        <div class="container centre">
+            <FontAwesome IconName="worm" Size="x-3"></FontAwesome>
+        </div>
+    </div>
+    <div class="square-fifth rounded-3 bg-dodgerblue @(hasLargeBirdAviary ? "text-dark" : "text-primary") m-3">
+        <div class="container centre">
+            <FontAwesome IconName="dove" Size="x-3"></FontAwesome>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div class="enclosures bg-dodgerblue rounded-3 p-2">
+        <div class="d-flex flex-wrap container centre">
+            @foreach (BuildingModel building in buildings.Where(b => b.IsStandard).OrderBy(b => b.Size))
+            {
+                <div class="@(building.IsOccupied ? "text-light" : "text-dark") mx-2" @onclick="() => BuildingService.ToggleOccupied(building)">
+                    <Enclosure Size=@building.Size Scale=1.5 IsProportional=true></Enclosure>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        BuildingService.OnBuildingsChanged += StateHasChanged;
+    }
+
+    private void ToggleSelect(BuildingTypeModel building)
+    {
+        building.IsSelected = !building.IsSelected;
+    }
+
+    public void Dispose()
+    {
+        BuildingService.OnBuildingsChanged -= StateHasChanged;
+    }
+
+    private void AddBuilding(string name)
+    {
+        BuildingTypeModel building = BuildingService.BuildingTypes.First(b => b.Name == name);
+        BuildingService.SaveBuildings([building]);
+    }
+}

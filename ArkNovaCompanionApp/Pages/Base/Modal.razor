@@ -1,0 +1,54 @@
+﻿@inject IJSRuntime JS
+
+<div id="@Id" class="modal fade" tabindex="-1" data-bs-backdrop="static">
+	<div class="modal-dialog modal-dialog-centered centre" role="document">
+		<div class="modal-content @Width">
+			@if (@Content is not null)
+			{
+				@Content
+			}
+			else
+			{
+				<div class="modal-header">
+					<h5 class="modal-title align-items-center">@Title</h5>
+				</div>
+				<div class="modal-body">
+					@Body
+				</div>
+				<div class="modal-footer">
+					@Footer
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public string? Id { get; set; }
+
+	[Parameter]
+	public RenderFragment? Title { get; set; }
+
+	[Parameter]
+	public RenderFragment? Body { get; set; }
+
+	[Parameter]
+	public RenderFragment? Footer { get; set; }
+
+	[Parameter]
+	public RenderFragment? Content { get; set; }
+
+	[Parameter]
+	public string? Width { get; set; } = "";
+
+	public async Task Open()
+	{
+		await JS.InvokeVoidAsync("openModal", this.Id);
+	}
+
+	public async Task Close()
+	{
+		await JS.InvokeVoidAsync("closeModal", this.Id);
+	}
+}
