@@ -32,3 +32,4 @@ jobs:
         with:
           branch: master
           folder: release/wwwroot
+          token: ${{ secrets.GITHUB_TOKEN }}
