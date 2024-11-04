@@ -25,7 +25,7 @@ jobs:
         run: dotnet publish -c Release -o release --nologo
 
       - name: Update base href
-        run: sed -i 's/<base href="\/" \/>/<base href="\/ArkNovaCompanion\/" \/>/g' release/wwwroot/index.html
+        run: sed -i 's/<base href="\/" \/>/<base href="https:\/\/patrickmorrell.github.io\/ArkNovaCompanion\/" \/>/g' release/wwwroot/index.html
         
       - name: Add .nojekyll file
         run: touch release/wwwroot/.nojekyll
