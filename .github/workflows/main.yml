@@ -25,14 +25,14 @@ jobs:
         run: dotnet publish -c Release -o release --nologo
 
       - name: Update base href
-        run: sed -i 's/<base href="\/" \/>/<base href="\/ArkNovaCompanionApp\/" \/>/g' release/wwwroot/index.html
+        run: sed -i 's/<base href="\/" \/>/<base href="\/ArkNovaCompanion\/" \/>/g' release/wwwroot/index.html
         
       - name: Add .nojekyll file
         run: touch release/wwwroot/.nojekyll
 
-      - name: Commit wwwroot to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: master
-          folder: release/wwwroot
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Commit wwwroot to GitHub Pages
+      #   uses: JamesIves/github-pages-deploy-action@v4
+      #   with:
+      #     branch: master
+      #     folder: release/wwwroot
+      #     token: ${{ secrets.GITHUB_TOKEN }}
