@@ -2,15 +2,33 @@
 
 @if (WorkerService.Workers is not null)
 {
-    <div class="d-flex bg-dodgerblue rounded-3 position-relative" @onclick="() => WorkerService.AddWorker()">
+    <div class="d-flex bg-dodgerblue rounded-3 position-relative" @onclick="AddWorker">
         @foreach (WorkerModel worker in WorkerService.Workers)
         {
             <Worker Model=worker></Worker>
         }
-        <div class="position-absolute top-100 start-100 translate-middle">
-            <button class="btn btn-danger" @onclick="() => WorkerService.RemoveWorker()" @onclick:stopPropagation="true">
-                <FontAwesome IconName="minus" Size="3"></FontAwesome>
-            </button>
-        </div>
+        @if (AllowModifications)
+        {
+            <div class="position-absolute top-100 start-100 translate-middle">
+                <button class="btn btn-danger" @onclick="WorkerService.RemoveWorker" @onclick:stopPropagation="true">
+                    <FontAwesome IconName="minus" Size="3"></FontAwesome>
+                </button>
+            </div>            
+        }
     </div>
+}
+
+@code {
+    [Parameter]
+    public bool AllowModifications { get; set; } = true;
+
+    private void AddWorker()
+    {
+        if (!AllowModifications)
+        {
+            return;
+        }
+
+        WorkerService.AddWorker();
+    }
 }

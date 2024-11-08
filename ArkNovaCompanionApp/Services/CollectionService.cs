@@ -187,13 +187,13 @@ public class CollectionService : ICollectionService
 			},
 			new()
 			{
-				ItemName = MenuItems.Scores,
-				ItemIcon = "shield-heart",
+				ItemName = MenuItems.Park,
+				ItemIcon = "map",
 			},
 			new()
 			{
-				ItemName = MenuItems.Park,
-				ItemIcon = "map",
+				ItemName = MenuItems.Scores,
+				ItemIcon = "shield-heart",
 			},
 		];
 	}

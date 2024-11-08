@@ -39,6 +39,31 @@ public class MoneyService : IMoneyService
 		}
     }
 
+	public void ClearMoney()
+	{
+		foreach (CoinModel coin in Coins)
+		{
+			coin.Amount = 0;
+        }
+
+        OnMoneyChanged?.Invoke();
+    }
+
+	public void DistributeCoinsFromTotal(int money)
+	{
+		int remaining = money;
+        foreach (CoinModel coin in Coins.OrderByDescending(c => c.Value))
+        {
+			while (remaining >= coin.Value) 
+			{
+				coin.Amount++;
+				remaining -= coin.Value;
+			}
+        }
+
+        OnMoneyChanged?.Invoke();
+    }
+
     public int GetMoneyTotal()
     {
         if (Coins is null)

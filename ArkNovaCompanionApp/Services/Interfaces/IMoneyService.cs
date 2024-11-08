@@ -13,6 +13,10 @@ public interface IMoneyService
 
     void RemoveMoney(CoinModel coin);
 
+    void ClearMoney();
+
+    void DistributeCoinsFromTotal(int money);
+
     int GetMoneyTotal();
 
     Task GetStoredMoney();

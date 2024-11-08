@@ -4,6 +4,7 @@
 @inject IBuildingService BuildingService
 @inject ITokenService TokenService
 @inject IMenuService MenuService
+@inject IWorkerService WorkerService
 
 @if (ActionService.Actions.Any())
 {
@@ -39,11 +40,11 @@
                         </div>
                     }
                 </div>
-                <div @onclick="() => OnCardClick()">
+                <div @onclick="OnCardClick">
                     <ActionCard Action=SelectedAction></ActionCard>
                 </div>
                 <div class="d-flex justify-content-evenly mb-2">
-                    <button class="btn btn-primary" @onclick="() => OnActionClick(SelectedAction)">
+                    <button class="btn btn-primary @(IsActionAllowed(SelectedAction) ? "enabled" : "disabled")" @onclick="() => OnActionClick(SelectedAction)">
                         <FontAwesome IconName=@SelectedAction.IconName></FontAwesome>
                     </button>
                     @if (SelectedAction.Name == ActionNames.Sponsors)
@@ -74,7 +75,7 @@
                     </button>
                 </div>
                 <div class="position-absolute top-100 start-100 translate-middle">
-                    <button class="btn btn-danger" @onclick="() => OnCardClose()">
+                    <button class="btn btn-danger" @onclick="OnCardClose">
                         <FontAwesome IconName="xmark" Size="3"></FontAwesome>
                     </button>
                 </div>
@@ -91,11 +92,13 @@
 
 <Modal Id="workersModal" Width="w-auto" @ref="workersModal">
     <Content>
-        <Workers></Workers>
-        <div class="position-absolute top-100 start-0 translate-middle">
-            <button class="btn btn-success" @onclick="() => OnWorkersClose()">
-                <FontAwesome IconName="check" Size="3"></FontAwesome>
-            </button>
+        <div class="m-1">
+            <Workers AllowModifications=false></Workers>
+            <div class="position-absolute top-100 start-0 translate-middle">
+                <button class="btn btn-success" @onclick="OnWorkersClose">
+                    <FontAwesome IconName="check" Size="3"></FontAwesome>
+                </button>
+            </div>
         </div>
     </Content>
 </Modal>
@@ -141,16 +144,16 @@
             BreakService.AdvanceBreak(2);
             MenuService.ToggleAlert(MenuItems.Break);
         }
-        else if (action.Name == ActionNames.Association)
-        {
-            await workersModal.Open();
-        }
 
         if (action.Name == ActionNames.Build)
         {
             BuildUpgraded = action.IsUpgraded;
             BuildSize = action.Strength;
             await buildModal.Open();
+        }
+        else if (action.Name == ActionNames.Association)
+        {
+            await workersModal.Open();
         }
         else
         {
@@ -181,6 +184,7 @@
     private async Task OnWorkersClose()
     {
         await workersModal.Close();
+        ActionService.MoveAction(ActionNames.Association);
         MenuService.ToggleAlert(MenuItems.Park);
     }
 
@@ -193,5 +197,16 @@
         }
 
         ActionService.MoveAction(action, newStrength - 1);
+    }
+
+    private bool IsActionAllowed(ActionModel action)
+    {
+        if (action.Name == ActionNames.Association
+            && !WorkerService.Workers.Any(w => w.IsActive && !w.IsUsed))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

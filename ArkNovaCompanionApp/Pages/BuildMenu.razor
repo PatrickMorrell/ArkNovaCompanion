@@ -51,13 +51,13 @@
 </div>
 
 <div class="d-flex justify-content-between m-2">
-    <button type="button" class="btn btn-danger" @onclick="() => OnCancelClick()" data-bs-dismiss="modal">
+    <button type="button" class="btn btn-danger" @onclick="OnCancelClick" data-bs-dismiss="modal">
         <FontAwesome IconName="xmark" Size="3"></FontAwesome>
     </button>
     <div class="square-1 rounded-4 bg-warning">
         <strong class="container centre fs-2">@MoneyService.GetMoneyTotal()</strong>
     </div>
-    <button class="btn btn-success" @onclick="() => OnConfirmClick()" data-bs-dismiss="modal">
+    <button class="btn btn-success" @onclick="OnConfirmClick" data-bs-dismiss="modal">
         <FontAwesome IconName="check" Size="3"></FontAwesome>
     </button>
 </div>
@@ -93,7 +93,7 @@
         {
             return false;
         }
-        else if (building.Size * 2 + buildings.Where(b => b.IsSelected).Sum(b => b.Size * 2) > MoneyService.GetMoneyTotal())
+        else if ((building.Size * 2) + GetTotalCostOfSelected() > MoneyService.GetMoneyTotal())
         {
             return false;
         }
@@ -137,10 +137,20 @@
     private void OnConfirmClick()
     {
         BuildingService.SaveBuildings(buildings.Where(b => b.IsSelected).ToList());
+        int moneyRemaining = MoneyService.GetMoneyTotal() - GetTotalCostOfSelected();
+        MoneyService.ClearMoney();
+        MoneyService.DistributeCoinsFromTotal(moneyRemaining);
+        
         buildings.ForEach(b => b.IsSelected = false);
         ActionService.MoveAction(ActionNames.Build);
 
+        MenuService.ToggleAlert(MenuItems.Money);
         MenuService.ToggleAlert(MenuItems.Park);
+    }
+
+    private int GetTotalCostOfSelected()
+    {
+        return buildings.Where(b => b.IsSelected).Sum(s => s.Size * 2);
     }
 
     private void OnCancelClick()
