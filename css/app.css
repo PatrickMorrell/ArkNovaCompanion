@@ -2,10 +2,6 @@ html, body {
 	font-family: 'Arial'
 }
 
-strong {
-	padding-inline: 0.1rem;
-}
-
 h1:focus {
 	outline: none;
 }
@@ -98,6 +94,17 @@ a, .btn-link {
 
 	.loading-progress-text:after {
 		content: var(--blazor-load-percentage-text, "Loading");
+	}
+
+.splash {
+	opacity: 0.1;
+	transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-webkit-transition: opacity 1s ease-in-out;
+}
+
+	.splash.loaded {
+		opacity: 1;
 	}
 
 code {
